@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SignUpFragment">
+
+    <RelativeLayout
+        android:id="@+id/SignupGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="10dp">
+
+        <LinearLayout
+            android:id="@+id/userNameGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="20dp">
+
+            <TextView
+                android:id="@+id/unameTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppinsregular"
+                android:text="@string/username_text"
+                android:textSize="12sp"
+                android:textColor="@color/grey" />
+
+            <EditText
+                android:id="@+id/unameEditText"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:background="@drawable/rounded_edittext"
+                android:hint="@string/enter_username"
+                android:textColor="@color/grey"
+                android:textColorHint="@color/hint_grey"
+                android:fontFamily="@font/poppinsregular"
+                android:textSize="12sp"
+                android:paddingStart="15dp"
+                tools:ignore="RtlSymmetry" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/emailGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/userNameGroup"
+            android:layout_marginTop="15dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/emailTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppinsregular"
+                android:text="@string/email_text"
+                android:textSize="12sp"
+                android:textColor="@color/grey" />
+
+            <EditText
+                android:id="@+id/signupEmailEditText"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:background="@drawable/rounded_edittext"
+                android:hint="@string/email_hint"
+                android:textColor="@color/grey"
+                android:textColorHint="@color/hint_grey"
+                android:fontFamily="@font/poppinsregular"
+                android:textSize="12sp"
+                android:paddingStart="15dp"
+                tools:ignore="RtlSymmetry" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/passwordGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/emailGroup"
+            android:layout_marginTop="15dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/passwordTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppinsregular"
+                android:text="@string/password_text"
+                android:textSize="12sp"
+                android:textColor="@color/grey" />
+
+            <EditText
+                android:id="@+id/signupPasswordEditText"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:background="@drawable/rounded_edittext"
+                android:hint="@string/password_hint"
+                android:textColor="@color/grey"
+                android:textColorHint="@color/hint_grey"
+                android:fontFamily="@font/poppinsregular"
+                android:textSize="12sp"
+                android:paddingStart="15dp"
+                android:inputType="textPassword"
+                tools:ignore="RtlSymmetry" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/confpasswordGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/passwordGroup"
+            android:layout_marginTop="15dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/confpasswordTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppinsregular"
+                android:text="@string/confpassword_text"
+                android:textSize="12sp"
+                android:textColor="@color/grey" />
+
+            <EditText
+                android:id="@+id/signupConfPasswordEditText"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:background="@drawable/rounded_edittext"
+                android:hint="@string/confpassword_hint"
+                android:textColor="@color/grey"
+                android:textColorHint="@color/hint_grey"
+                android:fontFamily="@font/poppinsregular"
+                android:textSize="12sp"
+                android:paddingStart="15dp"
+                android:inputType="textPassword"
+                tools:ignore="RtlSymmetry" />
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/submitGroup"
+            android:layout_width="225dp"
+            android:layout_height="40dp"
+            android:layout_below="@+id/confpasswordGroup"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/rounded_corner"
+            android:layout_marginTop="40dp"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/signupButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/signup_btn_text"
+                android:textColor="@color/grey"
+                android:fontFamily="@font/poppinsregular"
+                android:textStyle="bold"
+                android:textSize="12sp" />
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+</FrameLayout>

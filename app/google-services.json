@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "547691169850",
+    "project_id": "sudoku-cdfa8",
+    "storage_bucket": "sudoku-cdfa8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:547691169850:android:0a093eaaf191f98baa0d03",
+        "android_client_info": {
+          "package_name": "com.example.sudoku"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBaJn5yrrLiih9HnydIC8UKpGNIhBlueTs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

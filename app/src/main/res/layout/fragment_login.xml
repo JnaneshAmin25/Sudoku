@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SignUpFragment">
+
+    <RelativeLayout
+        android:id="@+id/SigninGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:gravity="center"
+        android:padding="10dp">
+
+        <LinearLayout
+            android:id="@+id/emailGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/emailTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppinsregular"
+                android:text="@string/email_text"
+                android:textColor="@color/grey"
+                android:textSize="12sp" />
+
+            <EditText
+                android:id="@+id/signinEmailEditText"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:background="@drawable/rounded_edittext"
+                android:fontFamily="@font/poppinsregular"
+                android:hint="@string/email_hint"
+                android:paddingStart="15dp"
+                android:textColor="@color/grey"
+                android:textColorHint="@color/hint_grey"
+                android:textSize="12sp"
+                tools:ignore="RtlSymmetry" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/passwordGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/emailGroup"
+            android:layout_marginTop="25dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/passwordTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppinsregular"
+                android:text="@string/password_text"
+                android:textColor="@color/grey"
+                android:textSize="12sp" />
+
+            <EditText
+                android:id="@+id/signinPasswordEditText"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:background="@drawable/rounded_edittext"
+                android:fontFamily="@font/poppinsregular"
+                android:hint="@string/password_hint"
+                android:inputType="textPassword"
+                android:paddingStart="15dp"
+                android:textColor="@color/grey"
+                android:textColorHint="@color/hint_grey"
+                android:textSize="12sp"
+                tools:ignore="RtlSymmetry" />
+
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/forgotPassTxt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/passwordGroup"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:fontFamily="@font/poppinsregular"
+            android:text="@string/forgot_pass_text"
+            android:textColor="@color/grey"
+            android:textSize="12sp" />
+
+
+        <RelativeLayout
+            android:id="@+id/submitGroup"
+            android:layout_width="225dp"
+            android:layout_height="40dp"
+            android:layout_below="@+id/forgotPassTxt"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="115dp"
+            android:background="@drawable/rounded_corner"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/signinButton"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fontFamily="@font/poppinsregular"
+                android:text="@string/sign_in_btn_text"
+                android:gravity="center"
+                android:textColor="@color/grey"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+</FrameLayout>

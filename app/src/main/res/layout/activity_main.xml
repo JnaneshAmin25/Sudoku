@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    android:background="@drawable/gradient_background">>
+
+    <RelativeLayout
+        android:id="@+id/logintxtGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="36dp"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="15dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="90dp">
+
+        <TextView
+            android:id="@+id/welcome_bac"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/create_acc"
+            android:gravity="top"
+            android:textSize="24sp"
+            android:textColor="@color/grey"
+            android:fontFamily="@font/poppinsbold"
+            android:textStyle="bold"
+            android:textAlignment="viewStart"
+            tools:ignore="RtlCompat"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/buttonGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="55dp"
+        android:layout_below="@+id/logintxtGroup"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/btn_frame"
+        android:gravity="center"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp">
+
+        <Button
+            android:id="@+id/signUpButton"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:gravity="center"
+            android:text="@string/signup_text"
+            android:fontFamily="@font/poppinsbold"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:textSize="10sp"/>
+
+        <Button
+            android:id="@+id/signInButton"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:layout_marginStart="10dp"
+            android:layout_toEndOf="@+id/signUpButton"
+            android:gravity="center"
+            android:text="@string/signin_text"
+            android:fontFamily="@font/poppinsbold"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:textSize="10sp"/>
+    </RelativeLayout>
+
+    <FrameLayout
+        android:id="@+id/fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/buttonGroup"/>
+
+    <RelativeLayout
+        android:id="@+id/footer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="50dp"
+        android:layout_alignParentBottom="true">
+
+        <LinearLayout
+            android:id="@+id/lineGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="10dp">
+
+            <View
+                android:layout_width="150dp"
+                android:layout_height="1dp"
+                android:background="@color/btn_blue" />
+
+            <TextView
+                android:id="@+id/orText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="25dp"
+                android:layout_marginEnd="25dp"
+                android:fontFamily="@font/poppinsregular"
+                android:text="@string/or_text"
+                android:textColor="@color/or_grey"
+                android:textSize="10sp"
+                android:textStyle="bold" />
+
+            <View
+                android:layout_width="150dp"
+                android:layout_height="1dp"
+                android:background="@color/btn_blue" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/contactUsGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/lineGroup"
+            android:layout_marginTop="20dp"
+            android:gravity="center">
+
+            <RelativeLayout
+                android:id="@+id/googleLogoGroup"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:gravity="center"
+                android:background="@drawable/rounded_corner">
+
+                <ImageView
+                    android:id="@+id/googleLogoImg"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:src="@drawable/google_logo" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/facebookLogoGroup"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:background="@drawable/rounded_corner"
+                android:layout_marginStart="100dp"
+                android:gravity="center">
+
+                <ImageView
+                    android:id="@+id/facebookLogoImg"
+                    android:layout_width="37dp"
+                    android:layout_height="37dp"
+                    android:src="@drawable/facebook_logo"/>
+
+            </RelativeLayout>
+
+        </LinearLayout>
+    </RelativeLayout>
+
+</RelativeLayout>
