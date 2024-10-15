@@ -51,7 +51,19 @@ public class SignUpFragment extends Fragment {
         });
 
         // Set the click listener for the sign-up button
-        submitGroup.setOnClickListener(v -> handleSignup(signupEmailEditText, signupPasswordEditText, signupConfPasswordEditText));
+        submitGroup.setOnClickListener(v -> {
+            // Change the background to a drawable with rounded corners
+            submitGroup.setBackgroundResource(R.drawable.rounded_corner);
+
+            // Call the handleSignup method with the EditTexts for email and password
+            handleSignup(signupEmailEditText, signupPasswordEditText, signupConfPasswordEditText);
+
+            // Reset the background to the original drawable after 2 seconds
+            new android.os.Handler().postDelayed(() -> {
+                submitGroup.setBackgroundResource(R.drawable.selected_rounded_corner); // Replace with your original background drawable
+            }, 70);
+        });
+
 
         return view;
     }

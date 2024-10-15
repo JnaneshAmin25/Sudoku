@@ -37,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
     Button signInButton;
     TextView welcomeText;
     RelativeLayout googleLogoGroup;
+    RelativeLayout facebookLogoGroup;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,17 +54,19 @@ public class MainActivity extends AppCompatActivity {
 
         googleSignInClient = GoogleSignIn.getClient(this, gso);
 
-        // Load Sign-Up fragment by default
-        loadFragment(new SignUpFragment(), true);
+        // Load Sign-In fragment by default
+        loadFragment(new LoginFragment(), false);
 
         signUpButton = findViewById(R.id.signUpButton);
         signInButton = findViewById(R.id.signInButton);
-        googleLogoGroup = findViewById(R.id.googleLogoGroup); // Find the Google sign-in button
+        googleLogoGroup = findViewById(R.id.googleLogoGroup);// Find the Google sign-in button
+        facebookLogoGroup = findViewById(R.id.facebookLogoGroup);
         welcomeText = findViewById(R.id.welcome_bac);
 
         // Set default color for the buttons
         signUpButton.setBackgroundColor(getResources().getColor(R.color.selectedButtonColor));
         signInButton.setBackgroundColor(getResources().getColor(R.color.deselectedButtonColor));
+        signUpButton.setEnabled(false);
 
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,7 +90,25 @@ public class MainActivity extends AppCompatActivity {
         googleLogoGroup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                googleLogoGroup.setBackgroundResource(R.drawable.selected_rounded_corner);
                 signInWithGoogle();
+                new android.os.Handler().postDelayed(() -> {
+                    googleLogoGroup.setBackgroundResource(R.drawable.rounded_corner); // Replace with your original background drawable
+                }, 70);
+            }
+        });
+
+
+
+        //facebook sign-In button click
+        facebookLogoGroup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                facebookLogoGroup.setBackgroundResource(R.drawable.selected_rounded_corner);
+
+                new android.os.Handler().postDelayed(() -> {
+                    facebookLogoGroup.setBackgroundResource(R.drawable.rounded_corner); // Replace with your original background drawable
+                }, 70);
             }
         });
     }
@@ -130,6 +151,9 @@ public class MainActivity extends AppCompatActivity {
                             FirebaseUser user = auth.getCurrentUser();
                             Toast.makeText(MainActivity.this, "Google sign in successful", Toast.LENGTH_SHORT).show();
                             updateUI(user);
+                            Intent intent = new Intent(MainActivity.this, Samplepage.class);
+                            startActivity(intent);
+                            MainActivity.this.finish();
                         } else {
                             // Sign in failed
                             Toast.makeText(MainActivity.this, "Authentication failed", Toast.LENGTH_SHORT).show();
@@ -149,23 +173,69 @@ public class MainActivity extends AppCompatActivity {
 
     private void updateUI(FirebaseUser user) {
         if (user != null) {
+            // User is signed in, proceed to the next activity (SamplePage.java)
             Toast.makeText(MainActivity.this, "Logged in as: " + user.getEmail(), Toast.LENGTH_SHORT).show();
+
+            // Create an intent to navigate to SamplePage activity
+            Intent intent = new Intent(MainActivity.this, Samplepage.class);
+            startActivity(intent);
+            MainActivity.this.finish(); // Optional: Finish the current activity so the user can't go back
         } else {
+            // User is not signed in, load the SignUpFragment
             Toast.makeText(MainActivity.this, "Not logged in", Toast.LENGTH_SHORT).show();
+
+            // Load the SignUpFragment
+            FragmentManager fragmentManager = MainActivity.this.getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+            // Optionally, you can add custom animations for fragment transition
+            fragmentTransaction.setCustomAnimations(
+                    R.anim.slide_in_right,  // New fragment enters from right
+                    R.anim.fade_out,        // Current fragment fades out
+                    R.anim.fade_in,         // Current fragment fades in (when coming back)
+                    R.anim.slide_out_left   // New fragment slides out to the left (when coming back)
+            );
+
+            fragmentTransaction.replace(R.id.fragment_container, new SignUpFragment());
+            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.commit();
         }
     }
 
     private void loadFragment(Fragment fragment, boolean isSignUp) {
         FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
+        // Clear the back stack (removes all previously added fragments)
+        if (fragmentManager.getBackStackEntryCount() > 0) {
+            fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        }
+
+        // Begin the transaction and replace the fragment
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.fragment_container, fragment);
-        fragmentTransaction.addToBackStack(null);
+
+        // Commit the transaction
         fragmentTransaction.commit();
     }
 
     private void updateButtonState(boolean isSignUpSelected) {
-        signUpButton.setEnabled(!isSignUpSelected);
-        signInButton.setEnabled(isSignUpSelected);
+        if (isSignUpSelected) {
+            // Sign-Up selected, disable Sign-Up button, enable Sign-In button
+            signUpButton.setEnabled(false);
+            signUpButton.setBackgroundColor(getResources().getColor(R.color.selectedButtonColor));
+
+            signInButton.setEnabled(true);
+            signInButton.setBackgroundColor(getResources().getColor(R.color.deselectedButtonColor));
+        } else {
+            // Sign-In selected, disable Sign-In button, enable Sign-Up button
+            signInButton.setEnabled(false);
+            signInButton.setBackgroundColor(getResources().getColor(R.color.selectedButtonColor));
+
+            signUpButton.setEnabled(true);
+            signUpButton.setBackgroundColor(getResources().getColor(R.color.deselectedButtonColor));
+        }
     }
 }
+
+
+
