@@ -218,6 +218,7 @@ public class MainActivity extends AppCompatActivity {
         fragmentTransaction.commit();
     }
 
+
     private void updateButtonState(boolean isSignUpSelected) {
         if (isSignUpSelected) {
             // Sign-Up selected, disable Sign-Up button, enable Sign-In button
@@ -236,6 +237,8 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 }
+
+
 
 
 

@@ -39,6 +39,8 @@ dependencies {
     implementation(libs.activity)
     implementation(libs.constraintlayout)
     implementation(platform(libs.firebase.bom))
+    implementation(platform("com.google.firebase:firebase-bom:33.4.0"))
+    implementation("com.google.firebase:firebase-auth")
     implementation(libs.firebase.analytics)
     implementation(libs.play.services.auth)
     implementation(libs.firebase.auth)
