@@ -15,6 +15,14 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.facebook.AccessToken;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
+import com.facebook.appevents.AppEventsLogger;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -25,13 +33,17 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.GoogleAuthProvider;
+
+import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final int RC_SIGN_IN = 9001;
     private FirebaseAuth auth;
     private GoogleSignInClient googleSignInClient;
+    private CallbackManager callbackManager; // Facebook CallbackManager
 
     Button signUpButton;
     Button signInButton;
@@ -44,7 +56,15 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Initialize Firebase Auth
         auth = FirebaseAuth.getInstance();
+
+        // Initialize Facebook SDK
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        AppEventsLogger.activateApp(this.getApplication());
+
+        // Initialize Facebook CallbackManager
+        callbackManager = CallbackManager.Factory.create();
 
         // Configure Google Sign-In
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -59,8 +79,8 @@ public class MainActivity extends AppCompatActivity {
 
         signUpButton = findViewById(R.id.signUpButton);
         signInButton = findViewById(R.id.signInButton);
-        googleLogoGroup = findViewById(R.id.googleLogoGroup);// Find the Google sign-in button
-        facebookLogoGroup = findViewById(R.id.facebookLogoGroup);
+        googleLogoGroup = findViewById(R.id.googleLogoGroup); // Find the Google sign-in button
+        facebookLogoGroup = findViewById(R.id.facebookLogoGroup); // Find the Facebook sign-in button
         welcomeText = findViewById(R.id.welcome_bac);
 
         // Set default color for the buttons
@@ -93,22 +113,42 @@ public class MainActivity extends AppCompatActivity {
                 googleLogoGroup.setBackgroundResource(R.drawable.selected_rounded_corner);
                 signInWithGoogle();
                 new android.os.Handler().postDelayed(() -> {
-                    googleLogoGroup.setBackgroundResource(R.drawable.rounded_corner); // Replace with your original background drawable
+                    googleLogoGroup.setBackgroundResource(R.drawable.rounded_corner); // Restore original background
                 }, 70);
             }
         });
 
-
-
-        //facebook sign-In button click
+        // Facebook Sign-In button click
         facebookLogoGroup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 facebookLogoGroup.setBackgroundResource(R.drawable.selected_rounded_corner);
 
+                // Trigger Facebook login
+                LoginManager.getInstance().logInWithReadPermissions(MainActivity.this, Arrays.asList("email", "public_profile"));
+
                 new android.os.Handler().postDelayed(() -> {
-                    facebookLogoGroup.setBackgroundResource(R.drawable.rounded_corner); // Replace with your original background drawable
+                    facebookLogoGroup.setBackgroundResource(R.drawable.rounded_corner); // Restore original background
                 }, 70);
+            }
+        });
+
+        // Register Facebook callback
+        LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                // Handle Facebook access token
+                handleFacebookAccessToken(loginResult.getAccessToken());
+            }
+
+            @Override
+            public void onCancel() {
+                Toast.makeText(MainActivity.this, "Facebook sign in canceled", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onError(FacebookException error) {
+                Toast.makeText(MainActivity.this, "Facebook sign in failed: " + error.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -119,20 +159,21 @@ public class MainActivity extends AppCompatActivity {
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
-    // Handle the result of the Google Sign-In
+    // Handle the result of Google Sign-In and Facebook Sign-In
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...)
+        // Facebook Login result
+        callbackManager.onActivityResult(requestCode, resultCode, data);
+
+        // Google Sign-In result
         if (requestCode == RC_SIGN_IN) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {
-                // Google Sign In was successful, authenticate with Firebase
                 GoogleSignInAccount account = task.getResult(ApiException.class);
                 firebaseAuthWithGoogle(account);
             } catch (ApiException e) {
-                // Google Sign-In failed
                 Log.w("GoogleSignIn", "Google sign in failed", e);
                 Toast.makeText(MainActivity.this, "Google sign in failed", Toast.LENGTH_SHORT).show();
             }
@@ -147,15 +188,10 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<com.google.firebase.auth.AuthResult> task) {
                         if (task.isSuccessful()) {
-                            // Sign in success
                             FirebaseUser user = auth.getCurrentUser();
                             Toast.makeText(MainActivity.this, "Google sign in successful", Toast.LENGTH_SHORT).show();
                             updateUI(user);
-                            Intent intent = new Intent(MainActivity.this, Samplepage.class);
-                            startActivity(intent);
-                            MainActivity.this.finish();
                         } else {
-                            // Sign in failed
                             Toast.makeText(MainActivity.this, "Authentication failed", Toast.LENGTH_SHORT).show();
                             updateUI(null);
                         }
@@ -163,82 +199,67 @@ public class MainActivity extends AppCompatActivity {
                 });
     }
 
+    // Handle Facebook Access Token
+    private void handleFacebookAccessToken(AccessToken token) {
+        AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
+        auth.signInWithCredential(credential)
+                .addOnCompleteListener(this, new OnCompleteListener<com.google.firebase.auth.AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<com.google.firebase.auth.AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            FirebaseUser user = auth.getCurrentUser();
+                            Toast.makeText(MainActivity.this, "Facebook sign in successful", Toast.LENGTH_SHORT).show();
+                            updateUI(user);
+                        } else {
+                            Toast.makeText(MainActivity.this, "Authentication failed", Toast.LENGTH_SHORT).show();
+                            updateUI(null);
+                        }
+                    }
+                });
+
+    }
+
     @Override
     protected void onStart() {
         super.onStart();
-        // Check if user is signed in and update UI
         FirebaseUser currentUser = auth.getCurrentUser();
         updateUI(currentUser);
     }
 
+
     private void updateUI(FirebaseUser user) {
         if (user != null) {
-            // User is signed in, proceed to the next activity (SamplePage.java)
-            Toast.makeText(MainActivity.this, "Logged in as: " + user.getEmail(), Toast.LENGTH_SHORT).show();
-
-            // Create an intent to navigate to SamplePage activity
             Intent intent = new Intent(MainActivity.this, Samplepage.class);
             startActivity(intent);
-            MainActivity.this.finish(); // Optional: Finish the current activity so the user can't go back
+            MainActivity.this.finish();
         } else {
-            // User is not signed in, load the SignUpFragment
-            Toast.makeText(MainActivity.this, "Not logged in", Toast.LENGTH_SHORT).show();
-
-            // Load the SignUpFragment
-            FragmentManager fragmentManager = MainActivity.this.getSupportFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
-            // Optionally, you can add custom animations for fragment transition
-            fragmentTransaction.setCustomAnimations(
-                    R.anim.slide_in_right,  // New fragment enters from right
-                    R.anim.fade_out,        // Current fragment fades out
-                    R.anim.fade_in,         // Current fragment fades in (when coming back)
-                    R.anim.slide_out_left   // New fragment slides out to the left (when coming back)
-            );
-
-            fragmentTransaction.replace(R.id.fragment_container, new SignUpFragment());
-            fragmentTransaction.addToBackStack(null);
-            fragmentTransaction.commit();
+            //Toast.makeText(MainActivity.this, "Not logged in", Toast.LENGTH_SHORT).show();
         }
     }
 
     private void loadFragment(Fragment fragment, boolean isSignUp) {
         FragmentManager fragmentManager = getSupportFragmentManager();
 
-        // Clear the back stack (removes all previously added fragments)
         if (fragmentManager.getBackStackEntryCount() > 0) {
             fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
         }
 
-        // Begin the transaction and replace the fragment
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.fragment_container, fragment);
-
-        // Commit the transaction
         fragmentTransaction.commit();
     }
 
-
     private void updateButtonState(boolean isSignUpSelected) {
         if (isSignUpSelected) {
-            // Sign-Up selected, disable Sign-Up button, enable Sign-In button
             signUpButton.setEnabled(false);
             signUpButton.setBackgroundColor(getResources().getColor(R.color.selectedButtonColor));
-
             signInButton.setEnabled(true);
             signInButton.setBackgroundColor(getResources().getColor(R.color.deselectedButtonColor));
         } else {
-            // Sign-In selected, disable Sign-In button, enable Sign-Up button
             signInButton.setEnabled(false);
             signInButton.setBackgroundColor(getResources().getColor(R.color.selectedButtonColor));
-
             signUpButton.setEnabled(true);
             signUpButton.setBackgroundColor(getResources().getColor(R.color.deselectedButtonColor));
         }
     }
 }
-
-
-
-
-

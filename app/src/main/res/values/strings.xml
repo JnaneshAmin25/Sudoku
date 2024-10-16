@@ -16,7 +16,11 @@
     <string name="forgot_pass_text">Forgot Password?</string>
     <string name="enter_username">Enter Username</string>
     <string name="username_text">Username</string>
+    <string name="fb_login_protocol_scheme">fb545472501507625</string>
+    <string name="facebook_app_id">545472501507625</string>
     <string name="default_web_client_id">547691169850-cp96omq0v3r4mj6pboc18ctl3tv6t704.apps.googleusercontent.com</string>
+
+    <string name="facebook_client_token">547691169850-cp96omq0v3r4mj6pboc18ctl3tv6t704.apps.googleusercontent.com</string>
 
     1:547691169850:android:0a093eaaf191f98baa0d03
 </resources>

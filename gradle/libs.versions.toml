@@ -12,6 +12,7 @@ googleGmsGoogleServices = "4.4.2"
 firebaseAuth = "23.0.0"
 playServicesAuth = "21.2.0"
 firebaseDatabase = "21.0.0"
+facebook = "12.3.0"
 
 [libraries]
 firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
@@ -26,6 +27,7 @@ constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayo
 firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version.ref = "firebaseAuth" }
 play-services-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "playServicesAuth" }
 firebase-database = { group = "com.google.firebase", name = "firebase-database", version.ref = "firebaseDatabase" }
+facebook-login = { group = "com.facebook.android", name = "facebook-login", version = "12.3.0" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
