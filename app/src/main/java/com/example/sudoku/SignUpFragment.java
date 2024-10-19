@@ -18,10 +18,13 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class SignUpFragment extends Fragment {
 
     private FirebaseAuth auth;
+    private DatabaseReference databaseReference; // Firebase Database reference
     private EditText signupEmailEditText, signupPasswordEditText, signupConfPasswordEditText, unameEditText;
     private RelativeLayout submitGroup;
 
@@ -30,6 +33,7 @@ public class SignUpFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_signup, container, false);
 
         auth = FirebaseAuth.getInstance(); // Initialize FirebaseAuth
+        databaseReference = FirebaseDatabase.getInstance().getReference("users"); // Initialize Firebase Database reference
 
         // Find views
         signupEmailEditText = view.findViewById(R.id.signupEmailEditText);
@@ -64,7 +68,6 @@ public class SignUpFragment extends Fragment {
             }, 70);
         });
 
-
         return view;
     }
 
@@ -72,6 +75,7 @@ public class SignUpFragment extends Fragment {
         String email = emailEditText.getText().toString().trim();
         String password = passwordEditText.getText().toString().trim();
         String confPassword = confPasswordEditText.getText().toString().trim();
+        String username = unameEditText.getText().toString().trim();
 
         // Validate email format
         if (!email.endsWith("@gmail.com")) {
@@ -99,20 +103,42 @@ public class SignUpFragment extends Fragment {
                         if (task.isSuccessful()) {
                             // Sign-up success
                             FirebaseUser user = auth.getCurrentUser();
-                            Toast.makeText(getContext(), "Signup successful!", Toast.LENGTH_SHORT).show();
+                            if (user != null) {
+                                String uid = user.getUid(); // Get UID
 
-                            // Clear input fields after successful sign-up
-                            unameEditText.setText("");
-                            emailEditText.setText("");
-                            passwordEditText.setText("");
-                            confPasswordEditText.setText("");
+                                // Save user info to Realtime Database
+                                saveUserToDatabase(uid, email, username);
 
-                            // Load the LoginFragment after successful sign-up
-                            loadLoginFragment();
+                                Toast.makeText(getContext(), "Signup successful!", Toast.LENGTH_SHORT).show();
+
+                                // Clear input fields after successful sign-up
+                                unameEditText.setText("");
+                                emailEditText.setText("");
+                                passwordEditText.setText("");
+                                confPasswordEditText.setText("");
+
+                                // Load the LoginFragment after successful sign-up
+                                loadLoginFragment();
+                            }
                         } else {
                             // If sign-up fails, display a message to the user
                             Toast.makeText(getContext(), "Signup failed: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                         }
+                    }
+                });
+    }
+
+    private void saveUserToDatabase(String uid, String email, String username) {
+        // Create a user object
+        Users Users = new Users(uid, email, username);
+
+        // Store user info under the user's UID in the database
+        databaseReference.child(uid).setValue(Users)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Toast.makeText(getContext(), "User data saved to database.", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getContext(), "Failed to save user data.", Toast.LENGTH_SHORT).show();
                     }
                 });
     }

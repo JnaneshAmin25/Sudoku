@@ -7,7 +7,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,7 +19,6 @@ import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
-import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -61,7 +59,6 @@ public class MainActivity extends AppCompatActivity {
 
         // Initialize Facebook SDK
         FacebookSdk.sdkInitialize(getApplicationContext());
-        AppEventsLogger.activateApp(this.getApplication());
 
         // Initialize Facebook CallbackManager
         callbackManager = CallbackManager.Factory.create();
@@ -143,12 +140,13 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onCancel() {
-                Toast.makeText(MainActivity.this, "Facebook sign in canceled", Toast.LENGTH_SHORT).show();
+                ToastUtils.showToast(MainActivity.this, "Facebook sign in canceled", 2000); // 1 second duration
             }
 
             @Override
             public void onError(FacebookException error) {
-                Toast.makeText(MainActivity.this, "Facebook sign in failed: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                Log.e("FacebookLoginError", "Error during Facebook login: ", error);
+                ToastUtils.showToast(MainActivity.this, "Facebook sign in failed: " + error.getMessage(), 2000); // 1 second duration
             }
         });
     }
@@ -175,7 +173,7 @@ public class MainActivity extends AppCompatActivity {
                 firebaseAuthWithGoogle(account);
             } catch (ApiException e) {
                 Log.w("GoogleSignIn", "Google sign in failed", e);
-                Toast.makeText(MainActivity.this, "Google sign in failed", Toast.LENGTH_SHORT).show();
+                ToastUtils.showToast(MainActivity.this, "Google sign in failed", 2000); // 1 second duration
             }
         }
     }
@@ -189,10 +187,10 @@ public class MainActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<com.google.firebase.auth.AuthResult> task) {
                         if (task.isSuccessful()) {
                             FirebaseUser user = auth.getCurrentUser();
-                            Toast.makeText(MainActivity.this, "Google sign in successful", Toast.LENGTH_SHORT).show();
+                            ToastUtils.showToast(MainActivity.this, "Google sign in successful", 2000); // 1 second duration
                             updateUI(user);
                         } else {
-                            Toast.makeText(MainActivity.this, "Authentication failed", Toast.LENGTH_SHORT).show();
+                            ToastUtils.showToast(MainActivity.this, "Authentication failed", 2000); // 1 second duration
                             updateUI(null);
                         }
                     }
@@ -208,15 +206,14 @@ public class MainActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<com.google.firebase.auth.AuthResult> task) {
                         if (task.isSuccessful()) {
                             FirebaseUser user = auth.getCurrentUser();
-                            Toast.makeText(MainActivity.this, "Facebook sign in successful", Toast.LENGTH_SHORT).show();
+                            ToastUtils.showToast(MainActivity.this, "Facebook sign in successful", 2000); // 1 second duration
                             updateUI(user);
                         } else {
-                            Toast.makeText(MainActivity.this, "Authentication failed", Toast.LENGTH_SHORT).show();
+                            ToastUtils.showToast(MainActivity.this, "Authentication failed", 2000); // 1 second duration
                             updateUI(null);
                         }
                     }
                 });
-
     }
 
     @Override
@@ -226,14 +223,11 @@ public class MainActivity extends AppCompatActivity {
         updateUI(currentUser);
     }
 
-
     private void updateUI(FirebaseUser user) {
         if (user != null) {
             Intent intent = new Intent(MainActivity.this, Samplepage.class);
             startActivity(intent);
             MainActivity.this.finish();
-        } else {
-            //Toast.makeText(MainActivity.this, "Not logged in", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -263,3 +257,4 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 }
+
