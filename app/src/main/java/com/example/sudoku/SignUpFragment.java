@@ -32,7 +32,7 @@ public class SignUpFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_signup, container, false);
 
         auth = FirebaseAuth.getInstance(); // Initialize FirebaseAuth
-        databaseReference = FirebaseDatabase.getInstance().getReference("users"); // Initialize Firebase Database reference
+        databaseReference = FirebaseDatabase.getInstance().getReference("Users"); // Initialize Firebase Database reference
 
         // Find views
         signupEmailEditText = view.findViewById(R.id.signupEmailEditText);

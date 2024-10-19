@@ -13,4 +13,9 @@ public class Users {
         this.email = email;
         this.username = username;
     }
+
+    public Users(String uid, String email) {
+        this.uid = uid;
+        this.email = email;
+    }
 }

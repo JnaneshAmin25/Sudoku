@@ -20,6 +20,8 @@
         <activity
             android:name=".ProfileActivity"
             android:exported="false" />
+        <activity android:name=".GameBoard.GameBoard"
+            android:exported="false"/>
         <activity
             android:name=".HomePage"
             android:exported="false" />

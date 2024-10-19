@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="@drawable/background_dialog_timer_selection">
+
+    <TextView
+        android:id="@+id/gameOverTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Game Over!"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_gravity="center"
+        android:textColor="@color/black"/>
+
+    <TextView
+        android:id="@+id/gameOverMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="You've made too many mistakes. Would you like to continue or exit the game?"
+        android:textSize="16sp"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:textColor="@color/black"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center"
+        android:textColor="@color/black"
+        android:layout_marginTop="20dp">
+
+        <Button
+            android:id="@+id/btnContinue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Continue"
+            android:textColor="@color/black"
+            android:layout_marginEnd="10dp"/>
+
+        <Button
+            android:id="@+id/btnExit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Exit"
+            android:textColor="@color/black"/>
+    </LinearLayout>
+
+</LinearLayout>
