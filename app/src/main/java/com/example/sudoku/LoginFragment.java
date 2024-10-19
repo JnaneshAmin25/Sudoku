@@ -21,6 +21,8 @@ import androidx.fragment.app.Fragment;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class LoginFragment extends Fragment {
 
@@ -29,6 +31,7 @@ public class LoginFragment extends Fragment {
     private EditText passwordEditText;
     private TextView forgotPassTxt;
     private RelativeLayout submitGroup;
+    private DatabaseReference databaseReference;
 
     @SuppressLint("ClickableViewAccessibility")
     @Nullable
@@ -40,6 +43,7 @@ public class LoginFragment extends Fragment {
         passwordEditText = view.findViewById(R.id.signinPasswordEditText);
         forgotPassTxt = view.findViewById(R.id.forgotPassTxt);
         submitGroup = view.findViewById(R.id.submitGroup);
+        databaseReference = FirebaseDatabase.getInstance().getReference("Users");
 
         final boolean[] isPasswordVisible = {false};
 
@@ -157,6 +161,7 @@ public class LoginFragment extends Fragment {
                     }
                 });
     }
+
 
     private Toast createCustomProgressToast() {
         LayoutInflater inflater = getLayoutInflater();

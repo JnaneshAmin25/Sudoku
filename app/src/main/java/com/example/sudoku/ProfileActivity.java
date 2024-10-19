@@ -73,8 +73,8 @@ public class ProfileActivity extends AppCompatActivity {
 
                         userName.setText(username);
                         userEmail.setText(email);
-                        userDOB.setText(dob != null ? dob : "Not provided"); // Handle potential null value
-                        userGender.setText(gender != null ? gender : "Not provided"); // Handle potential null value
+                        userDOB.setText(dob != null ? dob : "--"); // Handle potential null value
+                        userGender.setText(gender != null ? gender : "--"); // Handle potential null value
                     } else {
                         ToastUtils.showToast(ProfileActivity.this, "User data not found!", 2000);
                     }

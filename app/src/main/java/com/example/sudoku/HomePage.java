@@ -8,6 +8,8 @@ import android.widget.ImageView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.sudoku.GameBoard.GameBoard;
+
 public class HomePage extends AppCompatActivity {
 
     private Button playNowButton;
@@ -28,12 +30,14 @@ public class HomePage extends AppCompatActivity {
 
 
         // Handle User Icon click to navigate to ProfileActivity
-        userIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(HomePage.this, ProfileActivity.class);
-                startActivity(intent);
-            }
+        userIcon.setOnClickListener(view -> {
+            Intent intent = new Intent(HomePage.this, ProfileActivity.class);
+            startActivity(intent);
+        });
+
+        playNowButton.setOnClickListener(v->{
+            Intent i = new Intent(this, GameBoard.class);
+            startActivity(i);
         });
 
     }

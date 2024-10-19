@@ -33,6 +33,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.Arrays;
 
@@ -42,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth auth;
     private GoogleSignInClient googleSignInClient;
     private CallbackManager callbackManager; // Facebook CallbackManager
-
+    private DatabaseReference databaseReference;
     Button signUpButton;
     Button signInButton;
     TextView welcomeText;
@@ -53,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        databaseReference = FirebaseDatabase.getInstance().getReference("Users");
 
         // Initialize Firebase Auth
         auth = FirebaseAuth.getInstance();
@@ -187,6 +190,8 @@ public class MainActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<com.google.firebase.auth.AuthResult> task) {
                         if (task.isSuccessful()) {
                             FirebaseUser user = auth.getCurrentUser();
+                            assert user != null;
+                            saveUserToDatabase(auth.getUid(), user.getEmail());
                             ToastUtils.showToast(MainActivity.this, "Google sign in successful", 2000); // 1 second duration
                             updateUI(user);
                         } else {
@@ -206,12 +211,29 @@ public class MainActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<com.google.firebase.auth.AuthResult> task) {
                         if (task.isSuccessful()) {
                             FirebaseUser user = auth.getCurrentUser();
+                            assert user != null;
+                            saveUserToDatabase(auth.getUid(), user.getEmail());
                             ToastUtils.showToast(MainActivity.this, "Facebook sign in successful", 2000); // 1 second duration
                             updateUI(user);
                         } else {
                             ToastUtils.showToast(MainActivity.this, "Authentication failed", 2000); // 1 second duration
                             updateUI(null);
                         }
+                    }
+                });
+    }
+
+    private void saveUserToDatabase(String uid, String email) {
+        // Create a user object
+        Users user = new Users(uid, email);
+
+        // Store user info under the user's UID in the database
+        databaseReference.child(uid).setValue(user)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        ToastUtils.showToast(this, "User data saved to database.", 1000); // 1 second duration
+                    } else {
+                        ToastUtils.showToast(this, "Failed to save user data.", 1000); // 1 second duration
                     }
                 });
     }
