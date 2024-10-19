@@ -22,6 +22,10 @@
     <string name="default_web_client_id">547691169850-cp96omq0v3r4mj6pboc18ctl3tv6t704.apps.googleusercontent.com</string>
 
 
-
     1:547691169850:android:0a093eaaf191f98baa0d03
+
+
+    <string name="palette_icon_desc">Palette Icon</string>
+    <string name="user_icon_desc">User Icon</string>
+    <string name="shine_icon_desc">Shine Icon</string>
 </resources>

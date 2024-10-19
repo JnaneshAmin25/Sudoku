@@ -14,9 +14,11 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -73,12 +75,11 @@ public class LoginFragment extends Fragment {
 
             // Check if email is empty
             if (email.isEmpty()) {
-                Toast.makeText(getActivity(), "Please enter your email", Toast.LENGTH_SHORT).show();
+                ToastUtils.showToast(getActivity(), "Please enter your email", 1000); // 1 second duration
             } else {
                 sendPasswordResetEmail(email);
             }
         });
-
 
         passwordEditText.setOnTouchListener((v, event) -> {
             final int DRAWABLE_END = 2; // Right drawable position
@@ -112,7 +113,6 @@ public class LoginFragment extends Fragment {
             return false;
         });
 
-
         return view;
     }
 
@@ -121,7 +121,7 @@ public class LoginFragment extends Fragment {
         String password = passwordEditText.getText().toString().trim();
 
         if (email.isEmpty() || password.isEmpty()) {
-            Toast.makeText(getActivity(), "Please fill in all fields", Toast.LENGTH_SHORT).show();
+            ToastUtils.showToast(getActivity(), "Please fill in all fields", 1000); // 1 second duration
             return;
         }
 
@@ -141,7 +141,7 @@ public class LoginFragment extends Fragment {
                         updateUI(user);
                     } else {
                         // If sign in fails, display a message to the user.
-                        Toast.makeText(getActivity(), "Authentication failed.", Toast.LENGTH_SHORT).show();
+                        ToastUtils.showToast(getActivity(), "Authentication failed.", 1000); // 1 second duration
                     }
                 });
     }
@@ -151,9 +151,9 @@ public class LoginFragment extends Fragment {
         auth.sendPasswordResetEmail(email)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        Toast.makeText(getActivity(), "Password reset email sent to " + email, Toast.LENGTH_SHORT).show();
+                        ToastUtils.showToast(getActivity(), "Password reset email sent to " + email, 1000); // 1 second duration
                     } else {
-                        Toast.makeText(getActivity(), "Failed to send password reset email. Try again later.", Toast.LENGTH_SHORT).show();
+                        ToastUtils.showToast(getActivity(), "Failed to send password reset email. Try again later.", 1000); // 1 second duration
                     }
                 });
     }
@@ -174,21 +174,18 @@ public class LoginFragment extends Fragment {
         // Update UI based on Firebase user login status
         if (user != null) {
             // User is signed in
-            Toast.makeText(getActivity(), "Login Successful!", Toast.LENGTH_SHORT).show();
-            // Create an intent to navigate to Samplepage activity
-            Intent intent = new Intent(getActivity(), Samplepage.class);
+            ToastUtils.showToast(getActivity(), "Login Successful!", 1000); // 1 second duration
+            // Create an intent to navigate to HomePage activity
+            Intent intent = new Intent(getActivity(), HomePage.class);
             startActivity(intent);
 
-            //Close the current activity if you don't want the user to come back to the login screen
+            // Close the current activity if you don't want the user to come back to the login screen
             if (getActivity() != null) {
                 getActivity().finish();
             }
         } else {
             // User is signed out
-            Toast.makeText(getActivity(), "Please sign in.", Toast.LENGTH_SHORT).show();
+            ToastUtils.showToast(getActivity(), "Please sign in.", 1000); // 1 second duration
         }
     }
 }
-
-
-

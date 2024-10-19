@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -43,14 +42,11 @@ public class SignUpFragment extends Fragment {
         submitGroup = view.findViewById(R.id.submitGroup);
 
         // Focus listener for the username field
-        unameEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    unameEditText.setBackgroundResource(R.drawable.rounded_edittext); // Set focused border
-                } else {
-                    unameEditText.setBackgroundResource(R.drawable.rounded_edittext); // Reset to default
-                }
+        unameEditText.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
+                unameEditText.setBackgroundResource(R.drawable.rounded_edittext); // Set focused border
+            } else {
+                unameEditText.setBackgroundResource(R.drawable.rounded_edittext); // Reset to default
             }
         });
 
@@ -97,48 +93,45 @@ public class SignUpFragment extends Fragment {
 
         // Firebase authentication sign-up
         auth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign-up success
-                            FirebaseUser user = auth.getCurrentUser();
-                            if (user != null) {
-                                String uid = user.getUid(); // Get UID
+                .addOnCompleteListener(getActivity(), task -> {
+                    if (task.isSuccessful()) {
+                        // Sign-up success
+                        FirebaseUser user = auth.getCurrentUser();
+                        if (user != null) {
+                            String uid = user.getUid(); // Get UID
 
-                                // Save user info to Realtime Database
-                                saveUserToDatabase(uid, email, username);
+                            // Save user info to Realtime Database
+                            saveUserToDatabase(uid, email, username);
 
-                                Toast.makeText(getContext(), "Signup successful!", Toast.LENGTH_SHORT).show();
+                            ToastUtils.showToast(getContext(), "Signup successful!", 1000); // 1 second duration
 
-                                // Clear input fields after successful sign-up
-                                unameEditText.setText("");
-                                emailEditText.setText("");
-                                passwordEditText.setText("");
-                                confPasswordEditText.setText("");
+                            // Clear input fields after successful sign-up
+                            unameEditText.setText("");
+                            emailEditText.setText("");
+                            passwordEditText.setText("");
+                            confPasswordEditText.setText("");
 
-                                // Load the LoginFragment after successful sign-up
-                                loadLoginFragment();
-                            }
-                        } else {
-                            // If sign-up fails, display a message to the user
-                            Toast.makeText(getContext(), "Signup failed: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                            // Load the LoginFragment after successful sign-up
+                            loadLoginFragment();
                         }
+                    } else {
+                        // If sign-up fails, display a message to the user
+                        ToastUtils.showToast(getContext(), "Signup failed: " + task.getException().getMessage(), 1000); // 1 second duration
                     }
                 });
     }
 
     private void saveUserToDatabase(String uid, String email, String username) {
         // Create a user object
-        Users Users = new Users(uid, email, username);
+        Users user = new Users(uid, email, username);
 
         // Store user info under the user's UID in the database
-        databaseReference.child(uid).setValue(Users)
+        databaseReference.child(uid).setValue(user)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        Toast.makeText(getContext(), "User data saved to database.", Toast.LENGTH_SHORT).show();
+                        ToastUtils.showToast(getContext(), "User data saved to database.", 1000); // 1 second duration
                     } else {
-                        Toast.makeText(getContext(), "Failed to save user data.", Toast.LENGTH_SHORT).show();
+                        ToastUtils.showToast(getContext(), "Failed to save user data.", 1000); // 1 second duration
                     }
                 });
     }
