@@ -1,5 +1,9 @@
 package com.example.sudoku.GameBoard;
 
+import static com.example.sudoku.GameBoard.GameBoard.eraseCount;
+import static com.example.sudoku.GameBoard.GameBoard.gameId;
+import static com.example.sudoku.GameBoard.GameBoard.gameScoreRef;
+import static com.example.sudoku.GameBoard.GameBoard.mistakesCount;
 import static com.example.sudoku.GameBoard.GameBoard.moveStack;
 import android.content.Context;
 import android.graphics.Color;
@@ -20,6 +24,8 @@ public class SudokuGenerator {
     public static int[][] grid;
 
     public static TextView selectedCell = null;
+
+    public static Context context;
 
     public static void generateSudoku(GridLayout sudokuBoard, Context context) {
         grid = new int[GRID_SIZE][GRID_SIZE];
@@ -91,10 +97,14 @@ public class SudokuGenerator {
             int correctValue = GameData.originalGrid[row][col];
 
             if (number != correctValue && GameBoard.isGameActive) {
-                // Increment mistakes counter if incorrect
                 GameBoard.mistakes++;
-                GameBoard.updateMistakeCounter();// Make sure mistakes is static or accessible
                 Log.d("SudokuGame", "Mistakes incremented to: " + GameBoard.mistakes);
+                GameBoard.updateMistakeCounter();
+            }
+
+            if (number != correctValue) {
+                mistakesCount++;
+                gameScoreRef.child(gameId).child("mistakesCount").setValue(mistakesCount);
             }
 
             if (moveStack.size() == 2) {
@@ -107,6 +117,8 @@ public class SudokuGenerator {
             selectedCell.setBackgroundColor(Color.TRANSPARENT);
 
             if (GameBoard.isSudokuSolved()) {
+                GameBoard.isSolved = true; // Mark as solved
+                GameBoard.endGame(context,true, "");
                 GameBoard.showCongratulationsDialog(); // Call the dialog from GameBoard
             }
 
@@ -196,7 +208,7 @@ public class SudokuGenerator {
     }
 
     private static void removeNumbers(int[][] grid) {
-        int count = 28; // Adjust this to set how many numbers you want to remove
+        int count = 1; // Adjust this to set how many numbers you want to remove
         while (count > 0) {
             int row = (int) (Math.random() * GRID_SIZE);
             int col = (int) (Math.random() * GRID_SIZE);
@@ -210,8 +222,10 @@ public class SudokuGenerator {
     public static void eraseSelectedCell() {
         if (selectedCell != null) {
             selectedCell.setText(""); // Set the text to the selected cell
-            selectedCell.setBackgroundColor(Color.TRANSPARENT); // Remove highlight after setting number
-            SudokuGenerator.selectedCell = null; // Deselect the cell
+            selectedCell.setBackgroundColor(Color.TRANSPARENT);
+            eraseCount++;
+            gameScoreRef.child(gameId).child("eraseCount").setValue(eraseCount);// Remove highlight after setting number
+            SudokuGenerator.selectedCell = null;
         } else {
             Log.d("SudokuGame", "No cell is selected.");
         }
