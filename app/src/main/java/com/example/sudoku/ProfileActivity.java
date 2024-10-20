@@ -101,7 +101,8 @@ public class ProfileActivity extends AppCompatActivity {
         });
 
         editProfileButton.setOnClickListener(v -> {
-            ToastUtils.showToast(ProfileActivity.this, "Edit Profile Clicked", 2000);
+            Intent intent = new Intent(ProfileActivity.this, UpdateProfile.class);
+            startActivity(intent);
         });
 
         historyButton.setOnClickListener(v -> {

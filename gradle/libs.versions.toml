@@ -13,6 +13,7 @@ firebaseAuth = "23.0.0"
 playServicesAuth = "21.2.0"
 firebaseDatabase = "21.0.0"
 facebook = "12.3.0"
+firebaseStorage = "21.0.1"
 
 [libraries]
 firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
@@ -28,6 +29,7 @@ firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version
 play-services-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "playServicesAuth" }
 firebase-database = { group = "com.google.firebase", name = "firebase-database", version.ref = "firebaseDatabase" }
 facebook-login = { group = "com.facebook.android", name = "facebook-login", version = "12.3.0" }
+firebase-storage = { group = "com.google.firebase", name = "firebase-storage", version.ref = "firebaseStorage" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

@@ -6,7 +6,6 @@ import static com.example.sudoku.GameBoard.SudokuGenerator.generateSudoku;
 import static com.example.sudoku.GameBoard.SudokuGenerator.grid;
 import static com.example.sudoku.GameBoard.SudokuGenerator.setupNumberButtons;
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -31,6 +30,7 @@ import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
@@ -80,6 +80,7 @@ public class GameBoard extends AppCompatActivity implements View.OnClickListener
     // Firebase setup
     private static FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
     public static DatabaseReference gameScoreRef;
+    private static DatabaseReference statisticsRef;
     private static FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     private static FirebaseUser currentUser;
 
@@ -103,9 +104,6 @@ public class GameBoard extends AppCompatActivity implements View.OnClickListener
         if (currentUser != null) {
             initFirebase();
         }
-
-
-
 
 
         ImageView undoImg = findViewById(R.id.undoimg);
@@ -165,6 +163,7 @@ public class GameBoard extends AppCompatActivity implements View.OnClickListener
     // Initialize Firebase Database Reference
     private static void initFirebase() {
         String uid = currentUser.getUid();
+        statisticsRef = firebaseDatabase.getReference("GameStatistics").child(uid);
         gameScoreRef = firebaseDatabase.getReference("GameScore").child(uid);
     }
 
@@ -192,7 +191,6 @@ public class GameBoard extends AppCompatActivity implements View.OnClickListener
         gameData.put("timeStarted", timeFormat.format(new Date(startTime)));
         gameData.put("timerMode", timerMode);
         gameData.put("completionStatus", "in_progress");
-
         gameScoreRef.child(gameId).setValue(gameData);
     }
 
@@ -232,14 +230,10 @@ public class GameBoard extends AppCompatActivity implements View.OnClickListener
             return timeLeftInMillis; // Return the remaining time if the timer is running
         } else {
             // If the timer is not running, calculate based on the initial time minus elapsed time
-            long elapsedTime = (600000 - timeLeftInMillis); // Assuming 10 minutes (600000 ms) was the original time
-            return Math.max(0, 600000 - elapsedTime); // Ensure it doesn't go below 0
+            long elapsedTime = System.currentTimeMillis() - startTime;
+            return timeLeftInMillis - elapsedTime; // Ensure it doesn't go below 0
         }
     }
-
-
-
-
 
     @Override
     public void onClick(View v) {
@@ -436,6 +430,7 @@ public class GameBoard extends AppCompatActivity implements View.OnClickListener
     }
 
     private void resumeTimer() {
+        isTimerRunning = true;
         countDownTimer = new CountDownTimer(timeLeftInMillis, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
@@ -446,10 +441,10 @@ public class GameBoard extends AppCompatActivity implements View.OnClickListener
             @Override
             public void onFinish() {
                 // Timer finished, handle game over
+                isTimerRunning = false;
+                endGame(context, false, "Time's up!");
             }
         }.start();
-
-        isTimerRunning = true;
         timerimg.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.pause)); // Change to pause icon
     }
 
