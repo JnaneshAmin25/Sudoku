@@ -103,7 +103,7 @@ public class SignUpFragment extends Fragment {
                             // Save user info to Realtime Database
                             saveUserToDatabase(uid, email, username);
 
-                            ToastUtils.showToast(getContext(), "Signup successful!", 1000); // 1 second duration
+                            ToastUtils.showToast(getContext(), "Signup successful!", 2000); // 1 second duration
 
                             // Clear input fields after successful sign-up
                             unameEditText.setText("");
@@ -116,7 +116,7 @@ public class SignUpFragment extends Fragment {
                         }
                     } else {
                         // If sign-up fails, display a message to the user
-                        ToastUtils.showToast(getContext(), "Signup failed: " + task.getException().getMessage(), 1000); // 1 second duration
+                        ToastUtils.showToast(getContext(), "Signup failed: " + task.getException().getMessage(), 2000); // 1 second duration
                     }
                 });
     }
@@ -129,9 +129,9 @@ public class SignUpFragment extends Fragment {
         databaseReference.child(uid).setValue(user)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        ToastUtils.showToast(getContext(), "User data saved to database.", 1000); // 1 second duration
+                        ToastUtils.showToast(getContext(), "User data saved to database.", 2000); // 1 second duration
                     } else {
-                        ToastUtils.showToast(getContext(), "Failed to save user data.", 1000); // 1 second duration
+                        ToastUtils.showToast(getContext(), "Failed to save user data.", 2000); // 1 second duration
                     }
                 });
     }

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -25,6 +26,8 @@ public class ProfileActivity extends AppCompatActivity {
     private ImageButton homeIcon, editProfileButton;
     private RelativeLayout historyButton, statisticsButton, logoutButton;
     private TextView userName, userEmail, userDOB, userGender;
+    private ImageView historyArrow;
+
 
     private DatabaseReference databaseReference;
 
@@ -44,6 +47,7 @@ public class ProfileActivity extends AppCompatActivity {
         historyButton = findViewById(R.id.historyButton);
         statisticsButton = findViewById(R.id.statisticsButton);
         logoutButton = findViewById(R.id.logoutButton);
+        historyArrow = findViewById(R.id.historyArrow);
 
         userName = findViewById(R.id.userName);
         userEmail = findViewById(R.id.userEmail);
@@ -118,6 +122,15 @@ public class ProfileActivity extends AppCompatActivity {
             ToastUtils.showToast(ProfileActivity.this, "Logged out successfully.", 2000);
             startActivity(new Intent(ProfileActivity.this, MainActivity.class)); // Redirect to login activity
             finish(); // Close ProfileActivity
+        });
+
+        historyArrow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Start the HistoryPage Activity
+                Intent intent = new Intent(ProfileActivity.this, HistoryPage.class);
+                startActivity(intent);
+            }
         });
     }
 }
