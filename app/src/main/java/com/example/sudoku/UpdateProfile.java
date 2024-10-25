@@ -3,11 +3,18 @@ package com.example.sudoku;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -25,6 +32,12 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+
 public class UpdateProfile extends AppCompatActivity {
 
     private static final int PICK_IMAGE_REQUEST = 1;
@@ -35,27 +48,29 @@ public class UpdateProfile extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_update_profile);
+        setContentView(R.layout.update_activity);
 
-        // Initialize Firebase Storage
         storageReference = FirebaseStorage.getInstance().getReference("images");
 
-        // Find the ImageView and EditText fields
         imageView = findViewById(R.id.img);
         EditText editName = findViewById(R.id.editname);
         EditText editMail = findViewById(R.id.editmail);
-        EditText editDob = findViewById(R.id.editdob);
-        EditText editGender = findViewById(R.id.editgender);
+        DatePicker editDob = findViewById(R.id.editdob);
+        editDob.setCalendarViewShown(false);
+        editDob.setSpinnersShown(true);
 
-        // Load user profile information from Firebase
+        Spinner editGender = findViewById(R.id.editgender);
+        String[] genderOptions = {"--","Male", "Female"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, genderOptions);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        editGender.setAdapter(adapter);
+
         loadUserProfile(editName, editMail, editDob, editGender);
 
-        // Set click listener on ImageView to open gallery
         imageView.setOnClickListener(view -> openGallery());
 
-        // Save button click listener
-        AppCompatButton saveButton = findViewById(R.id.save);
-        AppCompatButton backButton = findViewById(R.id.back);
+        RelativeLayout saveButton = findViewById(R.id.save);
+        RelativeLayout backButton = findViewById(R.id.back);
         saveButton.setOnClickListener(view -> saveProfile(editName, editDob, editGender));
         backButton.setOnClickListener(v->{
             Intent intent = new Intent(this, ProfileActivity.class);
@@ -64,7 +79,7 @@ public class UpdateProfile extends AppCompatActivity {
 
     }
 
-    private void loadUserProfile(EditText editName, EditText editMail, EditText editDob, EditText editGender) {
+    private void loadUserProfile(EditText editName, EditText editMail, DatePicker editDob, Spinner editGender) {
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         if (currentUser != null) {
             String currentUserEmail = currentUser.getEmail();
@@ -76,10 +91,37 @@ public class UpdateProfile extends AppCompatActivity {
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         String email = snapshot.child("email").getValue(String.class);
                         if (email != null && email.equals(currentUserEmail)) {
-                            editName.setText(snapshot.child("name").getValue(String.class));
+                            editName.setText(snapshot.child("username").getValue(String.class));
                             editMail.setText(email); // Keep the email as it is
-                            editDob.setText(snapshot.child("dob").getValue(String.class));
-                            editGender.setText(snapshot.child("gender").getValue(String.class));
+                            String dobString = snapshot.child("dob").getValue(String.class);
+                            if (dobString != null) {
+                                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()); // Adjust the format if needed
+                                try {
+                                    Date dobDate = dateFormat.parse(dobString);
+
+                                    // Convert the Date to Calendar to get day, month, year
+                                    Calendar calendar = Calendar.getInstance();
+                                    calendar.setTime(dobDate);
+
+                                    int year = calendar.get(Calendar.YEAR);
+                                    int month = calendar.get(Calendar.MONTH);
+                                    int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+                                    // Set date on DatePicker
+                                    editDob.updateDate(year, month, day); // Assuming editDob is a DatePicker
+                                } catch (ParseException e) {
+                                    e.printStackTrace(); // Handle parsing error
+                                }
+                            }
+                            String gender = snapshot.child("gender").getValue(String.class);
+                            if (gender != null) {
+                                ArrayAdapter<String> adapter = (ArrayAdapter<String>) editGender.getAdapter();
+                                int position = adapter.getPosition(gender);
+                                editGender.setSelection(position); // Set the selected item in the Spinner
+                            }
+                            else{
+                                editGender.setSelection(0);
+                            }
                             break;
                         }
                     }
@@ -151,7 +193,7 @@ public class UpdateProfile extends AppCompatActivity {
         }
     }
 
-    private void saveProfile(EditText editName, EditText editDob, EditText editGender) {
+    private void saveProfile(EditText editName, DatePicker editDob, Spinner editGender) {
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         if (currentUser != null) {
             String currentUserEmail = currentUser.getEmail();
@@ -164,9 +206,13 @@ public class UpdateProfile extends AppCompatActivity {
                         String email = snapshot.child("email").getValue(String.class);
                         if (email != null && email.equals(currentUserEmail)) {
                             snapshot.getRef().child("name").setValue(editName.getText().toString());
-                            snapshot.getRef().child("dob").setValue(editDob.getText().toString());
-                            snapshot.getRef().child("gender").setValue(editGender.getText().toString());
-
+                            int day = editDob.getDayOfMonth();
+                            int month = editDob.getMonth();
+                            int year = editDob.getYear();
+                            String dobString = String.format(Locale.getDefault(), "%04d-%02d-%02d", year, month + 1, day);
+                            snapshot.getRef().child("dob").setValue(dobString);
+                            String selectedGender = editGender.getSelectedItem().toString();
+                            snapshot.getRef().child("gender").setValue(selectedGender);
                             Toast.makeText(UpdateProfile.this, "Profile updated", Toast.LENGTH_SHORT).show();
                             break;
                         }

@@ -46,11 +46,8 @@ public class ProfileActivity extends AppCompatActivity {
         logoutButton = findViewById(R.id.logoutButton);
 
         userName = findViewById(R.id.userName);
-        userEmail = findViewById(R.id.userEmail);
-        userDOB = findViewById(R.id.userDOB);
-        userGender = findViewById(R.id.userGender);
+//        userEmail = findViewById(R.id.userEmail);
 
-        // Check if user is logged in
         if (currentUser != null) {
             String userUID = currentUser.getUid(); // Get UID of the logged-in user
             databaseReference = FirebaseDatabase.getInstance().getReference("Users").child(userUID);
@@ -63,18 +60,12 @@ public class ProfileActivity extends AppCompatActivity {
                     if (snapshot.exists()) {
                         String username = snapshot.child("username").getValue(String.class);
                         String email = snapshot.child("email").getValue(String.class);
-                        String dob = snapshot.child("dob").getValue(String.class); // Assuming this is the field name in your database
-                        String gender = snapshot.child("gender").getValue(String.class); // Assuming this is the field name in your database
 
                         Log.d("ProfileActivity", "Username: " + username);
                         Log.d("ProfileActivity", "Email: " + email);
-                        Log.d("ProfileActivity", "DOB: " + dob);
-                        Log.d("ProfileActivity", "Gender: " + gender);
 
                         userName.setText(username);
-                        userEmail.setText(email);
-                        userDOB.setText(dob != null ? dob : "--"); // Handle potential null value
-                        userGender.setText(gender != null ? gender : "--"); // Handle potential null value
+//                        userEmail.setText(email);
                     } else {
                         ToastUtils.showToast(ProfileActivity.this, "User data not found!", 2000);
                     }
@@ -117,7 +108,7 @@ public class ProfileActivity extends AppCompatActivity {
             FirebaseAuth.getInstance().signOut();
             ToastUtils.showToast(ProfileActivity.this, "Logged out successfully.", 2000);
             startActivity(new Intent(ProfileActivity.this, MainActivity.class)); // Redirect to login activity
-            finish(); // Close ProfileActivity
+            finish();
         });
     }
 }
