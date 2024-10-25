@@ -4,8 +4,10 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission
-        android:name="com.google.android.gms.permission.AD_ID"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+        android:name="com.google.android.gms.permission.AD_ID"
+        tools:node="remove" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+
 
     <application
         android:allowBackup="true"
@@ -18,14 +20,10 @@
         android:theme="@style/Theme.Sudoku"
         tools:targetApi="31">
         <activity
-            android:name=".HistoryPage"
-            android:exported="false" />
-        <activity
             android:name=".ProfileActivity"
             android:exported="false" />
-        <activity
-            android:name=".GameBoard.GameBoard"
-            android:exported="false" />
+        <activity android:name=".GameBoard.GameBoard"
+            android:exported="false"/>
         <activity
             android:name=".HomePage"
             android:exported="false" />
@@ -56,6 +54,9 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".Samplepage"
+            android:exported="false" />
         <activity
             android:name=".LoginFragment"
             android:exported="false" />
