@@ -1,9 +1,9 @@
 package com.example.sudoku.GameBoard;
 
-import static com.example.sudoku.GameBoard.GameBoard.eraseCount;
+import static com.example.sudoku.GameBoard.GameBoard.fb_eraseCount;
 import static com.example.sudoku.GameBoard.GameBoard.gameId;
 import static com.example.sudoku.GameBoard.GameBoard.gameScoreRef;
-import static com.example.sudoku.GameBoard.GameBoard.mistakesCount;
+import static com.example.sudoku.GameBoard.GameBoard.fb_mistakesCount;
 import static com.example.sudoku.GameBoard.GameBoard.moveStack;
 import android.content.Context;
 import android.graphics.Color;
@@ -103,8 +103,8 @@ public class SudokuGenerator {
             }
 
             if (number != correctValue) {
-                mistakesCount++;
-                gameScoreRef.child(gameId).child("mistakesCount").setValue(mistakesCount);
+                fb_mistakesCount++;
+                gameScoreRef.child(gameId).child("mistakesCount").setValue(fb_mistakesCount);
             }
 
             if (moveStack.size() == 2) {
@@ -117,7 +117,7 @@ public class SudokuGenerator {
             selectedCell.setBackgroundColor(Color.TRANSPARENT);
 
             if (GameBoard.isSudokuSolved()) {
-                GameBoard.isSolved = true; // Mark as solved
+                GameBoard.fb_isSolved = true; // Mark as solved
                 GameBoard.endGame(context,true, "");
                 GameBoard.showCongratulationsDialog(); // Call the dialog from GameBoard
             }
@@ -223,8 +223,8 @@ public class SudokuGenerator {
         if (selectedCell != null) {
             selectedCell.setText(""); // Set the text to the selected cell
             selectedCell.setBackgroundColor(Color.TRANSPARENT);
-            eraseCount++;
-            gameScoreRef.child(gameId).child("eraseCount").setValue(eraseCount);// Remove highlight after setting number
+            fb_eraseCount++;
+            gameScoreRef.child(gameId).child("eraseCount").setValue(fb_eraseCount);// Remove highlight after setting number
             SudokuGenerator.selectedCell = null;
         } else {
             Log.d("SudokuGame", "No cell is selected.");

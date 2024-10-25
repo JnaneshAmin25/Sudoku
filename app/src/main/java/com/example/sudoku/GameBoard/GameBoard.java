@@ -21,6 +21,7 @@ import android.widget.ImageView;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
@@ -29,11 +30,8 @@ import com.example.sudoku.R;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -45,42 +43,41 @@ import java.util.Stack;
 
 public class GameBoard extends AppCompatActivity implements View.OnClickListener {
 
-    private static TextView mistakeCounterTextView; // TextView for displaying mistakes
+    public static TextView mistakeCounterTextView; // TextView for displaying mistakes
     public static int mistakes = 0; // Count of mistakes made
     private static final int MAX_MISTAKES = 3; // Maximum allowed mistakes
     static MaterialButton[]  numberButtons;
-    private ImageView timerimg;
+    public  static ImageView timerimg;
     private ImageView restartimg;
     private ImageView erasevalue;
     private ImageView backtohome;
-    private TextView timerTextView;
+    private static TextView timerTextView;
     private CountDownTimer countDownTimer;
     private static boolean isTimerRunning = false;
     private static long timeLeftInMillis = 600000; // Default: 10 minutes
     public static GridLayout sudokuBoard;
     public static boolean isGameActive = true;
     public static Stack<int[][]> moveStack;
+    public boolean wasTimerRunning;
 
 
     // Game statistics variables
-    public static int undoCount = 0;
-    public static int pauseCount = 0;
-    public static int eraseCount = 0;
-    public static int mistakesCount = 0;
-    public static long startTime = 0;
-    // public static long timeLeft = 0;
-    public static boolean gameAbandoned = false;
-    public static boolean isSolved = false;
+    public static int fb_undoCount = 0;
+    public static int fb_pauseCount = 0;
+    public static int fb_eraseCount = 0;
+    public static int fb_mistakesCount = 0;
+    public static long fb_startTime = 0;
+    public static boolean fb_gameAbandoned = false;
+    public static boolean fb_isSolved = false;
     public static String gameId;
-    public static String timerMode = "no_time"; // Track the timer mode
-    // public static String completionStatus = "in_progress"; // "completed", "failed", or "abandoned"
-    public static String reasonForFailure = "";
+    public static String fb_timerMode = "no_time"; // Track the timer mode
+    public static String completionStatus = "in_progress"; // "completed", "failed", or "abandoned"
+    public static String fb_reasonForFailure = "";
     private static Context context;
 
     // Firebase setup
     private static FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
     public static DatabaseReference gameScoreRef;
-    private static DatabaseReference statisticsRef;
     private static FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     private static FirebaseUser currentUser;
 
@@ -133,12 +130,13 @@ public class GameBoard extends AppCompatActivity implements View.OnClickListener
         setupNumberButtons(numberButtons,this);
 
 
+
         // Set onClickListener to pause/resume the timer
         timerimg.setOnClickListener(v -> {
             if (isTimerRunning) {
                 pauseTimer();
-                pauseCount++;
-                gameScoreRef.child(gameId).child("pauseCount").setValue(pauseCount);
+                fb_pauseCount++;
+                gameScoreRef.child(gameId).child("pauseCount").setValue(fb_pauseCount);
             } else {
                 resumeTimer();
             }
@@ -156,92 +154,143 @@ public class GameBoard extends AppCompatActivity implements View.OnClickListener
             showConfirmDialog();
         });
 
-        startNewGame("No time");
+
+//        String time = getIntent().getStringExtra("time");
+//        startNewGame(time);
+//        startTimer();
+
+        startNewGame("--");
+
+        timerimg.setEnabled(false);
 
     }
 
     // Initialize Firebase Database Reference
     private static void initFirebase() {
         String uid = currentUser.getUid();
-        statisticsRef = firebaseDatabase.getReference("GameStatistics").child(uid);
         gameScoreRef = firebaseDatabase.getReference("GameScore").child(uid);
     }
+
 
     // Start a new game
     public static void startNewGame(String timerMode) {
         gameId = gameScoreRef.push().getKey();
-        startTime = System.currentTimeMillis();
-         // Generate unique game ID
-        undoCount = 0;
-        pauseCount = 0;
-        eraseCount = 0;
-        mistakesCount = 0;
+
+        fb_startTime = System.currentTimeMillis();
+        fb_undoCount = 0;
+        fb_pauseCount = 0;
+        fb_eraseCount = 0;
+        fb_mistakesCount = 0;
         mistakes = 0;
         mistakeCounterTextView.setText("0/3");
-        gameAbandoned = false;
-        GameBoard.isSolved = false;
-        GameBoard.timerMode = timerMode;
+        fb_gameAbandoned = false;
+        GameBoard.fb_isSolved = false;
+        GameBoard.fb_timerMode = timerMode;
 
         Map<String, Object> gameData = new HashMap<>();
-        gameData.put("gameId", gameId);
+        //gameData.put("gameId", gameId);
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
-// Put date and time in separate variables
-        gameData.put("dateStarted", dateFormat.format(new Date(startTime))); // Format for date
-        gameData.put("timeStarted", timeFormat.format(new Date(startTime)));
+        gameData.put("undoCount",fb_undoCount);
+        gameData.put("pauseCount",fb_pauseCount);
+        gameData.put("eraseCount",fb_eraseCount);
+        gameData.put("mistakesCount",fb_mistakesCount);
+        gameData.put("dateStarted", dateFormat.format(new Date(fb_startTime)));
+        gameData.put("timeStarted", timeFormat.format(new Date(fb_startTime)));
         gameData.put("timerMode", timerMode);
-        gameData.put("completionStatus", "in_progress");
+        gameData.put("completionStatus", completionStatus);
         gameScoreRef.child(gameId).setValue(gameData);
     }
 
 
 
     public static void endGame(Context context, boolean isSolved, String failureReason) {
-        long timeLeft = calculateTimeLeft(timeLeftInMillis, isTimerRunning); // Calculate the total time spent
-        gameAbandoned = false; // Reset abandoned state
-        GameBoard.isGameActive = false; // Set the game as inactive
-        GameBoard.isSolved = isSolved; // Assuming you need to set this somewhere
+        long timeLeft = calculateTimeLeft(timeLeftInMillis, isTimerRunning);
+        fb_gameAbandoned = false;
+        GameBoard.isGameActive = false;
+        GameBoard.fb_isSolved = isSolved;
+        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss", Locale.getDefault());
+        String timeEnded = timeFormat.format(new Date(System.currentTimeMillis()));
+        if(isSolved){
+            completionStatus = "completed";
+        }else{
+            completionStatus = "failed";
+        }
+
+        long score = calculateScore(completionStatus, fb_timerMode,timeLeft , fb_eraseCount,
+                fb_mistakesCount, fb_pauseCount, fb_undoCount);
 
         Map<String, Object> endGameData = new HashMap<>();
         endGameData.put("isSolved", isSolved);
-        endGameData.put("timeLeft", timeLeft);
-        endGameData.put("completionStatus", isSolved ? "completed" : "failed");
+        endGameData.put("completionStatus", completionStatus);
+        endGameData.put("timeEnded", timeEnded);
+        endGameData.put("timeLeft",timeLeft+" Min");
+        endGameData.put("Total Score",score);
 
-        if (!isSolved) {
-            reasonForFailure = failureReason; // Assuming you have a class-level variable for this
-            endGameData.put("reasonForFailure", reasonForFailure);
-        }
+//        if (!isSolved) {
+//            fb_reasonForFailure = failureReason; // Assuming you have a class-level variable for this
+//            endGameData.put("reasonForFailure", fb_reasonForFailure);
+//        }
 
-        // Assuming gameScoreRef is a reference to your Firebase database and gameId is defined
         gameScoreRef.child(gameId).updateChildren(endGameData).addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                // Handle success (e.g., notify user)
-                Toast.makeText(context, "Game Saved", Toast.LENGTH_SHORT).show();
+            if(task.isSuccessful()) {
+                Log.e("success", "Game saved");
             } else {
-                // Handle failure (e.g., log error)
-                Log.e("Game Save Error", "Error saving game data: " + task.getException());
+                Log.e("error", "Error saving game data: " + task.getException());
             }
         });
+
     }
-
-
     public static long calculateTimeLeft(long timeLeftInMillis, boolean isTimerRunning) {
         if (isTimerRunning) {
-            return timeLeftInMillis; // Return the remaining time if the timer is running
+            return timeLeftInMillis/60000;
         } else {
-            // If the timer is not running, calculate based on the initial time minus elapsed time
-            long elapsedTime = System.currentTimeMillis() - startTime;
-            return timeLeftInMillis - elapsedTime; // Ensure it doesn't go below 0
+            return 0;
         }
+    }
+
+    public static long calculateScore(String completionStatus,String timerMode, long timeLeft,
+                                      int eraseCount, int mistakeCount, int pauseCount,
+                                       int undoCount) {
+        long score = 0;
+
+        // Scoring based on completion status
+        switch (completionStatus) {
+            case "completed":
+                score = 1000;
+                break;
+            case "failed":
+                score = 500;
+                break;
+            case "abandoned":
+                score = 250;
+                break;
+        }
+
+        // Penalize for longer durations (e.g., -1 point for every 10 seconds over 10 seconds)
+        if (timeLeft > 10) {
+            score -= (timeLeft - 1); // Penalize 1 point for each additional second
+        }
+
+        // Penalties for erases, mistakes, pauses, and undos
+        score -= (eraseCount * 5L);
+        score -= (mistakeCount * 10L);
+        score -= (pauseCount * 2L);
+        score -= (undoCount * 3L);
+
+        // Bonus for using timer mode
+        if (!timerMode.equals("No Time")) {
+            score += 10; // Add bonus points for timer mode
+        }
+
+        return score;
     }
 
     @Override
     public void onClick(View v) {
         for (int i = 0; i < 9; i++) {
             if (v.getId() == numberButtons[i].getId()) {
-                int number = i + 1; // Get the number based on the button clicked
-
-                // Call the method to set the number in the selected cell
+                int number = i + 1;
                 SudokuGenerator.setNumberInSelectedCell(SudokuGenerator.selectedCell, number);
                 break;
             }
@@ -271,30 +320,27 @@ public class GameBoard extends AppCompatActivity implements View.OnClickListener
     }
 
     public static void abandonGame() {
-        // Get the user ID (uid) from your authentication mechanism
+
         String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-        // Create a new game score object
         GameScore gameScore = new GameScore();
+        completionStatus = "Abandoned";
 
-        // Populate the GameScore object with relevant data
         gameScore.setGameId(gameId);
-        gameScore.setDateTime( new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").format(new Date(startTime)));
-        gameScore.setMistakesCount(mistakesCount); // Mistakes made in the game
-        gameScore.setSolved(false); // The game is not solved
-        gameScore.setTimerMode("--"); // Example: "10 minutes"
-        gameScore.setUndoCount(undoCount); // Assuming you have a variable for undo count
-        gameScore.setPauseCount(pauseCount); // Assuming you have a variable for pause count
-        gameScore.setEraseCount(eraseCount); // Assuming you have a variable for erase count
-        gameScore.setTimeLeft(0); // Time left in milliseconds
-        gameScore.setCompletionStatus("Abandoned"); // Indicating the game was abandoned
-        gameScore.setReasonForFailure("User abandoned the game."); // Reason for failure
-//gameScore.setGameAbandoned(true); // Mark as abandoned
+        gameScore.setDateTime( new SimpleDateFormat("yyyy-MM-dd").format(new Date(fb_startTime)));
+        gameScore.setMistakesCount(fb_mistakesCount); // Mistakes made in the game
+        gameScore.setSolved(false);
+        gameScore.setTimerMode("--");
+        gameScore.setUndoCount(fb_undoCount);
+        gameScore.setPauseCount(fb_pauseCount);
+        gameScore.setEraseCount(fb_eraseCount);
+        gameScore.setCompletionStatus(completionStatus); // Indicating the game was abandoned
+        long timeLeft = calculateTimeLeft(timeLeftInMillis, isTimerRunning);
+        long score = calculateScore(completionStatus, fb_timerMode,timeLeft , fb_eraseCount,
+                fb_mistakesCount, fb_pauseCount, fb_undoCount);
+        gameScore.setScore(score);
 
-        // Reference to the Firebase Realtime Database
         DatabaseReference database = FirebaseDatabase.getInstance().getReference("GameScore").child(uid).child(gameScore.getGameId());
-
-        // Save the game score in the database
         database.setValue(gameScore).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 Log.d("GameBoard", "Game abandoned successfully.");
@@ -314,10 +360,10 @@ public class GameBoard extends AppCompatActivity implements View.OnClickListener
         Button setTimeBtn = dialog.findViewById(R.id.btn_set_time);
 
         if (isGameActive) {
-            abandonGame(); // Mark the current game as abandoned
+            abandonGame();
         }
 
-        boolean wasTimerRunning = isTimerRunning;
+        wasTimerRunning = isTimerRunning;
 
         setTimeBtn.setOnClickListener(v -> {
             int selectedId = radioGroup.getCheckedRadioButtonId();
@@ -377,8 +423,8 @@ public class GameBoard extends AppCompatActivity implements View.OnClickListener
             return; // Early return if no moves are available
         }
 
-        undoCount++;
-        gameScoreRef.child(gameId).child("undoCount").setValue(undoCount);
+        fb_undoCount++;
+        gameScoreRef.child(gameId).child("undoCount").setValue(fb_undoCount);
 
         // Pop the last grid state
         int[][] lastGridState = moveStack.pop();
@@ -397,7 +443,7 @@ public class GameBoard extends AppCompatActivity implements View.OnClickListener
         Log.d("SudokuGame", "Last move undone. Current state: " + Arrays.deepToString(grid));
     }
 
-    private void startTimer() {
+    public void startTimer() {
         if (countDownTimer != null) {
             countDownTimer.cancel();
         }
