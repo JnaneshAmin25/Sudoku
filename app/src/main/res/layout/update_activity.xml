@@ -25,6 +25,7 @@
                 android:layout_height="100dp"
                 android:layout_marginTop="100dp"
                 android:background="@drawable/corner_radius"
+                android:contentDescription="profilepic"
                 android:padding="10dp"
                 android:scaleType="centerCrop"
                 android:src="@drawable/baseline_add_a_photo_24" />
@@ -58,7 +59,7 @@
                 android:textColor="@color/black"
                 android:textColorHint="@color/hint_grey"
                 android:fontFamily="@font/poppinsregular"
-                android:textSize="12sp"
+                android:textSize="15sp"
                 android:paddingStart="15dp"
                 tools:ignore="RtlSymmetry" />
         </LinearLayout>
@@ -83,6 +84,7 @@
 
             <EditText
                 android:id="@+id/editmail"
+                android:enabled="false"
                 android:layout_width="300dp"
                 android:layout_height="45dp"
                 android:textAlignment="center"
@@ -91,7 +93,7 @@
                 android:textColor="@color/black"
                 android:textColorHint="@color/hint_grey"
                 android:fontFamily="@font/poppinsregular"
-                android:textSize="12sp"
+                android:textSize="15sp"
                 android:paddingStart="15dp"
                 tools:ignore="RtlSymmetry" />
         </LinearLayout>
@@ -122,6 +124,7 @@
                 android:calendarViewShown="false"
                 android:spinnersShown="true"
                 android:backgroundTint="#453F3F"
+                android:maxDate="12/12/2007"
                 android:background="@drawable/rounded_edittext"
                 android:fontFamily="@font/poppinsregular" />
 
@@ -146,19 +149,32 @@
                 android:textSize="12sp"
                 android:textColor="@color/grey" />
 
-            <Spinner
-                android:id="@+id/editgender"
+            <RadioGroup
+                android:id="@+id/radioGroupGender"
                 android:layout_width="300dp"
-                android:layout_height="45dp"
+                android:layout_height="100dp"
                 android:background="@drawable/rounded_edittext"
-                android:textColor="@color/black"
-                android:textAlignment="center"
-                android:textColorHint="@color/hint_grey"
-                android:fontFamily="@font/poppinsregular"
-                android:textSize="12sp"
-                android:paddingStart="15dp"
-                android:inputType="textPassword"
-                tools:ignore="RtlSymmetry" />
+                android:padding="15dp">
+
+                <RadioButton
+                    android:id="@+id/radioMale"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Male"
+                    android:textColor="@color/black"
+                    android:fontFamily="@font/poppinsregular"
+                    android:textSize="15sp" />
+
+                <RadioButton
+                    android:id="@+id/radioFemale"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Female"
+                    android:textColor="@color/black"
+                    android:fontFamily="@font/poppinsregular"
+                    android:textSize="15sp" />
+            </RadioGroup>
+
         </LinearLayout>
         <RelativeLayout
             android:id="@+id/save"
@@ -179,7 +195,7 @@
                 android:textColor="@color/grey"
                 android:fontFamily="@font/poppinsregular"
                 android:textStyle="bold"
-                android:textSize="12sp" />
+                android:textSize="15sp" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -201,7 +217,7 @@
                 android:textColor="@color/grey"
                 android:fontFamily="@font/poppinsregular"
                 android:textStyle="bold"
-                android:textSize="12sp" />
+                android:textSize="15sp" />
         </RelativeLayout>
 
     </RelativeLayout>
