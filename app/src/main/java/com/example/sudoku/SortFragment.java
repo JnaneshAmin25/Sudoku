@@ -1,6 +1,5 @@
 package com.example.sudoku;
 
-
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -46,4 +45,3 @@ public class SortFragment extends DialogFragment {
         return view;
     }
 }
-
