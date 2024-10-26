@@ -141,7 +141,6 @@ public class UpdateProfile extends AppCompatActivity {
                         }
                     }
 
-                    // Set gender based on the stored value
                     String gender = dataSnapshot.child("gender").getValue(String.class);
                     if ("Male".equals(gender)) {
                         radioGroup.check(R.id.radioMale);
@@ -275,9 +274,7 @@ public class UpdateProfile extends AppCompatActivity {
                     .addOnSuccessListener(taskSnapshot -> {
                         progressDialog.dismiss();
                         Toast.makeText(UpdateProfile.this, "Image uploaded successfully", Toast.LENGTH_SHORT).show();
-                        fileReference.getDownloadUrl().addOnSuccessListener(uri -> {
-                            saveImageUrlToDatabase(uri.toString());
-                        });
+                        fileReference.getDownloadUrl().addOnSuccessListener(uri -> saveImageUrlToDatabase(uri.toString()));
                     })
                     .addOnProgressListener(taskSnapshot->{
                         double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();

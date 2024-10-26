@@ -26,10 +26,13 @@ public class SignUpFragment extends Fragment {
     private DatabaseReference databaseReference; // Firebase Database reference
     private EditText signupEmailEditText, signupPasswordEditText, signupConfPasswordEditText, unameEditText;
     private RelativeLayout submitGroup;
+    private String def;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_signup, container, false);
+
+        def="gs://sudoku-cdfa8.appspot.com/images/1729853804947.jpg";
 
         auth = FirebaseAuth.getInstance(); // Initialize FirebaseAuth
         databaseReference = FirebaseDatabase.getInstance().getReference("Users"); // Initialize Firebase Database reference

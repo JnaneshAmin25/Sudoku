@@ -31,13 +31,12 @@
 
             <ImageView
                 android:id="@+id/img"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
                 android:contentDescription="profilepic"
                 android:background="@drawable/profile_pic_bg"
                 android:padding="2dp"
-                android:scaleType="centerCrop"
-                android:src="@drawable/baseline_image_search_24" />
+                android:scaleType="centerCrop"/>
 
         </LinearLayout>
 
