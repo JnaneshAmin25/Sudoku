@@ -27,7 +27,7 @@
                 android:textColor="@color/black"
                 android:textAlignment="center"
                 android:textSize="27sp"
-                android:fontFamily="@font/poppinsblack"/>
+                android:fontFamily="@font/poppinsbold"/>
 
             <ImageView
                 android:id="@+id/img"

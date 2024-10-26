@@ -19,7 +19,7 @@
         android:layout_gravity="center_horizontal"
         android:paddingTop="16dp"
         android:paddingBottom="16dp"
-        android:fontFamily="@font/poppinsblack"/>
+        android:fontFamily="@font/poppinsbold"/>
 
 
 

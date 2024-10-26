@@ -103,6 +103,8 @@ public class ProfileActivity extends AppCompatActivity {
         });
 
         historyButton.setOnClickListener(v -> {
+            Intent i = new Intent(this, HistoryPage.class);
+            startActivity(i);
             ToastUtils.showToast(ProfileActivity.this, "History Clicked", 2000);
         });
 
