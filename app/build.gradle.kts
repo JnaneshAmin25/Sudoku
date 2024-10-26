@@ -51,6 +51,5 @@ dependencies {
     androidTestImplementation(libs.ext.junit)
     implementation(libs.github.glide)
     annotationProcessor(libs.compiler)
-
     androidTestImplementation(libs.espresso.core)
 }

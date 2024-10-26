@@ -19,7 +19,7 @@
         android:layout_gravity="center_horizontal"
         android:paddingTop="16dp"
         android:paddingBottom="16dp"
-        android:fontFamily="@font/poppinsregular"/>
+        android:fontFamily="@font/poppinsblack"/>
 
 
 
@@ -55,9 +55,9 @@
                 android:id="@+id/profilePicture"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:src="@drawable/profile_img"
+                android:src="@drawable/male_9634134"
                 android:layout_alignParentStart="true"
-                android:background="@drawable/corner_radius"
+                android:background="@drawable/profile_pic_bg"
                 android:layout_marginEnd="16dp"
                 android:scaleType="centerCrop"
                 android:layout_gravity="center"

@@ -1,12 +1,15 @@
 package com.example.sudoku;
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +19,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
@@ -25,6 +29,7 @@ import android.widget.Toast;
 import android.Manifest;
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
@@ -33,6 +38,10 @@ import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -145,7 +154,8 @@ public class UpdateProfile extends AppCompatActivity {
                     if (profileImageUrl != null && !profileImageUrl.isEmpty()) {
                         Glide.with(UpdateProfile.this)
                                 .load(profileImageUrl)
-                                .placeholder(R.drawable.baseline_add_a_photo_24) // Optional placeholder image// Optional error image
+                                .circleCrop()
+                                .placeholder(R.drawable.baseline_image_search_24)
                                 .into(profileImageView);
                     }
                 }
@@ -253,19 +263,32 @@ public class UpdateProfile extends AppCompatActivity {
     }
 
     private void uploadImageToFirebase(Uri imageUri) {
+        ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setTitle("Uploading Image...");
+        progressDialog.setMessage("Please wait while we upload your image.");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+
         if (imageUri != null) {
             StorageReference fileReference = storageReference.child(System.currentTimeMillis() + ".jpg");
             fileReference.putFile(imageUri)
                     .addOnSuccessListener(taskSnapshot -> {
+                        progressDialog.dismiss();
                         Toast.makeText(UpdateProfile.this, "Image uploaded successfully", Toast.LENGTH_SHORT).show();
-                        // Optionally, get the download URL and store it in the database
                         fileReference.getDownloadUrl().addOnSuccessListener(uri -> {
                             saveImageUrlToDatabase(uri.toString());
                         });
                     })
+                    .addOnProgressListener(taskSnapshot->{
+                        double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+                        progressDialog.setMessage("Uploaded " + (int) progress + "%...");
+                    })
                     .addOnFailureListener(e -> {
+                        progressDialog.dismiss();
                         Toast.makeText(UpdateProfile.this, "Failed to upload image: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                     });
+
+
         }
     }
 

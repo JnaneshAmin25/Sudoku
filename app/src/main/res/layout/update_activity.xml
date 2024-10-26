@@ -9,7 +9,7 @@
     <RelativeLayout
         android:id="@+id/SignupGroup"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:gravity="center"
         android:padding="10dp">
 
@@ -17,18 +17,28 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/imgselect"
+            android:orientation="vertical"
             android:gravity="center_horizontal">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Update Profile"
+                android:textColor="@color/black"
+                android:textAlignment="center"
+                android:textSize="27sp"
+                android:fontFamily="@font/poppinsblack"/>
 
             <ImageView
                 android:id="@+id/img"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:layout_marginTop="100dp"
-                android:background="@drawable/corner_radius"
                 android:contentDescription="profilepic"
-                android:padding="10dp"
+                android:background="@drawable/profile_pic_bg"
+                android:padding="2dp"
                 android:scaleType="centerCrop"
-                android:src="@drawable/baseline_add_a_photo_24" />
+                android:src="@drawable/baseline_image_search_24" />
+
         </LinearLayout>
 
         <LinearLayout
@@ -183,7 +193,7 @@
             android:layout_below="@+id/confpasswordGroup"
             android:layout_centerHorizontal="true"
             android:background="@drawable/rounded_corner"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="20dp"
             android:backgroundTint="#8BC34A"
             android:gravity="center">
 
@@ -206,7 +216,7 @@
             android:layout_centerHorizontal="true"
             android:background="@drawable/rounded_corner"
             android:backgroundTint="#03A9F4"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="10dp"
             android:gravity="center">
 
             <TextView
