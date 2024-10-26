@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/gradient_background">
+
+    <ImageView
+        android:id="@+id/helpIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/baseline_home_filled_24"
+        android:layout_gravity="top|start" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:scrollbars="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <TextView
+                android:id="@+id/headerText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Sudoku Master Help"
+                android:textSize="24sp"
+                android:gravity="center"
+                android:padding="16dp"
+                android:textColor="@color/help_text_color" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="8dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="1. On an empty cell where you want to place a number. Select the number you want to place in that cell from the options below the grid."
+                    android:textSize="16sp"
+                    android:padding="8dp"
+                    android:textColor="@color/help_text_color" />
+
+                <ImageView
+                    android:id="@+id/helpImage1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/img" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="8dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="2. Last Blank Cell: In each row, column, and block, only numbers 1-9 can be filled. When a row, column, or block has already filled in 8 cells, the remaining blank cell should be filled with the unique missing number."
+                    android:textSize="16sp"
+                    android:padding="8dp"
+                    android:textColor="@color/help_text_color" />
+
+                <ImageView
+                    android:id="@+id/helpImage2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/img1" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="8dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="3. Last Remaining Cell: In a row, column, or block, please find the unique cell where a certain number can be filled."
+                    android:textSize="16sp"
+                    android:padding="8dp"
+                    android:textColor="@color/help_text_color" />
+
+                <ImageView
+                    android:id="@+id/helpImage3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/img2" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="8dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="4. If two cells in a row, column, or block have the same two possible numbers (candidates), it's called a naked pair. These numbers can't be used in other cells in that row, column, or block. So, you can eliminate them as options for those cells."
+                    android:textSize="16sp"
+                    android:padding="8dp"
+                    android:textColor="@color/help_text_color" />
+
+                <ImageView
+                    android:id="@+id/helpImage4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/img3"
+                    tools:ignore="DuplicateIds" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="8dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="5. If a candidate number only exists in a row or column within a block, then this candidate number will not appear in other cells that are influenced by the same row or column."
+                    android:textSize="16sp"
+                    android:padding="8dp"
+                    android:textColor="@color/help_text_color" />
+
+                <ImageView
+                    android:id="@+id/helpImage5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/img4" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

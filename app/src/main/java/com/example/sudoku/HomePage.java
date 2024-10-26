@@ -39,5 +39,10 @@ public class HomePage extends AppCompatActivity {
             startActivity(i);
         });
 
+        helpButton.setOnClickListener(v->{
+            Intent i1 = new Intent(this, helppage.class);
+            startActivity(i1);
+        });
+
     }
 }

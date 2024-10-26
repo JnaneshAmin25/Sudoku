@@ -15,4 +15,6 @@
     <color name="btn_blue">#8697C4</color>
     <color name="grey">#333333</color>
     <color name="light_white">#CECECE</color>
+    <color name="help_background_color">#F0F0F0</color>
+    <color name="help_text_color">#000000</color>
 </resources>
