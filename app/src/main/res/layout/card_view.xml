@@ -23,9 +23,10 @@
                 android:id="@+id/Timer_Mode"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Timer Mode:"
+                android:text="@string/timer_mode"
                 android:textSize="16sp"
-                android:textColor="@color/black" />
+                android:textColor="@color/black"
+                android:fontFamily="@font/poppinsregular"/>
 
             <TextView
                 android:id="@+id/timer_value"
@@ -33,7 +34,9 @@
                 android:layout_height="wrap_content"
                 android:text=" "
                 android:layout_marginStart="5dp"
-                android:textSize="16sp"/>
+                android:textSize="16sp"
+                android:fontFamily="@font/poppinsregular"
+                android:textColor="@color/grey"/>
 
             <TextView
                 android:id="@+id/dateTimeValue"
@@ -42,7 +45,8 @@
                 android:text=""
                 android:textSize="16sp"
                 android:textColor="@color/black"
-                android:layout_marginStart="150dp"/>
+                android:layout_marginStart="150dp"
+                android:fontFamily="@font/poppinsregular"/>
         </LinearLayout>
         <LinearLayout
             android:id="@+id/secondndHalf_Group"
@@ -64,9 +68,10 @@
                         android:id="@+id/scoreLabel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Score:"
+                        android:text="@string/score"
                         android:textSize="16sp"
-                        android:textColor="#000000" />
+                        android:textColor="#000000"
+                        android:fontFamily="@font/poppinsregular"/>
 
                     <TextView
                         android:id="@+id/scoreValue"
@@ -75,7 +80,8 @@
                         android:text=""
                         android:layout_marginStart="5dp"
                         android:textSize="16sp"
-                        android:textColor="#000000" />
+                        android:fontFamily="@font/poppinsregular"
+                        android:textColor="@color/grey"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -89,9 +95,10 @@
                         android:id="@+id/mistakesLabel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Mistakes:"
+                        android:text="@string/mistakes"
                         android:textSize="16sp"
-                        android:textColor="#000000" />
+                        android:textColor="#000000"
+                        android:fontFamily="@font/poppinsregular"/>
 
                     <TextView
                         android:id="@+id/mistakesValue"
@@ -100,7 +107,8 @@
                         android:text=""
                         android:textSize="16sp"
                         android:layout_marginStart="5dp"
-                        android:textColor="#000000" />
+                        android:fontFamily="@font/poppinsregular"
+                        android:textColor="@color/grey"/>
                 </LinearLayout>
             </RelativeLayout>
             <RelativeLayout
@@ -116,6 +124,7 @@
                     android:layout_height="30dp"
                     android:gravity="center"
                     android:text=""
+                    android:fontFamily="@font/poppinsregular"
                     android:textSize="18sp"
                     android:background="@drawable/rounded_status_text"/>
 

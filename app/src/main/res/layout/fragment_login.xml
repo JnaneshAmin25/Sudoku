@@ -30,6 +30,7 @@
                 android:textColor="@color/grey"
                 android:textSize="12sp" />
 
+
             <EditText
                 android:id="@+id/signinEmailEditText"
                 android:layout_width="match_parent"
