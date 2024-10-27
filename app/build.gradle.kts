@@ -52,4 +52,5 @@ dependencies {
     implementation(libs.github.glide)
     annotationProcessor(libs.compiler)
     androidTestImplementation(libs.espresso.core)
+    implementation("com.airbnb.android:lottie:6.5.2")
 }
