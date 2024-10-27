@@ -14,6 +14,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -28,7 +29,7 @@ public class ProfileActivity extends AppCompatActivity {
     private ImageButton homeIcon, editProfileButton;
     private RelativeLayout historyButton, statisticsButton, logoutButton;
     private TextView userName, userEmail, userDOB, userGender;
-    private ImageView historyArrow;
+    private ImageView historyArrow,profilePicture;
 
 
     private DatabaseReference databaseReference;
@@ -46,16 +47,16 @@ public class ProfileActivity extends AppCompatActivity {
 
         homeIcon = findViewById(R.id.homeIcon);
         editProfileButton = findViewById(R.id.editProfileButton);
+        profilePicture = findViewById(R.id.profilePicture);
         historyButton = findViewById(R.id.historyButton);
         statisticsButton = findViewById(R.id.statisticsButton);
         logoutButton = findViewById(R.id.logoutButton);
         historyArrow = findViewById(R.id.historyArrow);
 
         userName = findViewById(R.id.userName);
-//        userEmail = findViewById(R.id.userEmail);
 
         if (currentUser != null) {
-            String userUID = currentUser.getUid(); // Get UID of the logged-in user
+            String userUID = currentUser.getUid();
             databaseReference = FirebaseDatabase.getInstance().getReference("Users").child(userUID);
 
             Log.d("ProfileActivity", "User UID: " + userUID);
@@ -65,13 +66,17 @@ public class ProfileActivity extends AppCompatActivity {
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     if (snapshot.exists()) {
                         String username = snapshot.child("username").getValue(String.class);
-                        String email = snapshot.child("email").getValue(String.class);
-
                         Log.d("ProfileActivity", "Username: " + username);
-                        Log.d("ProfileActivity", "Email: " + email);
-
                         userName.setText(username);
-//                        userEmail.setText(email);
+                        String profileImageUrl = snapshot.child("profileImageUrl").getValue(String.class);
+                        if (profileImageUrl != null && !profileImageUrl.isEmpty()) {
+                            Glide.with(ProfileActivity.this)
+                                    .load(profileImageUrl)
+                                    .circleCrop()
+                                    .placeholder(R.drawable.safety_13140666)
+                                    .into(profilePicture);
+                        }
+
                     } else {
                         ToastUtils.showToast(ProfileActivity.this, "User data not found!", 2000);
                     }

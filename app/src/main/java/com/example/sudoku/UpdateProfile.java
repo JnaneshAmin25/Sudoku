@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
@@ -30,6 +31,7 @@ import android.Manifest;
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
@@ -154,7 +156,7 @@ public class UpdateProfile extends AppCompatActivity {
                         Glide.with(UpdateProfile.this)
                                 .load(profileImageUrl)
                                 .circleCrop()
-                                .placeholder(R.drawable.baseline_image_search_24)
+                                .placeholder(R.drawable.safety_13140666)
                                 .into(profileImageView);
                     }
                 }
@@ -215,7 +217,9 @@ public class UpdateProfile extends AppCompatActivity {
         builder.setTitle("Select Image Source")
                 .setItems(options, (dialog, which) -> {
                     if (which == 0) {
-                        openCamera();
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                            openCamera();
+                        }
                     } else if (which == 1) {
                         openGallery();
                     }
@@ -228,24 +232,29 @@ public class UpdateProfile extends AppCompatActivity {
         startActivityForResult(intent, PICK_IMAGE_REQUEST);
     }
 
+
+    @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
     private void openCamera() {
-        // Check if the camera permission is granted
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, CAPTURE_IMAGE_REQUEST);
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(this, Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED) {
+
+            // Request CAMERA and READ_MEDIA_IMAGES permissions
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.CAMERA, Manifest.permission.READ_MEDIA_IMAGES},
+                    CAPTURE_IMAGE_REQUEST);
         } else {
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-
-            // Create a file for storing the image
             File photoFile = new File(getExternalFilesDir(null), "photo_" + System.currentTimeMillis() + ".jpg");
-            imageUri = FileProvider.getUriForFile(this, getPackageName() + ".fileprovider", photoFile);
+            imageUri = FileProvider.getUriForFile(this, "com.example.sudoku.file provider", photoFile);
 
-            // Pass the content URI instead of a file URI
+
             intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
 
             startActivityForResult(intent, CAPTURE_IMAGE_REQUEST);
         }
     }
+
 
 
     @Override
@@ -273,6 +282,8 @@ public class UpdateProfile extends AppCompatActivity {
             fileReference.putFile(imageUri)
                     .addOnSuccessListener(taskSnapshot -> {
                         progressDialog.dismiss();
+                        Intent i = new Intent(this, ProfileActivity.class);
+                        startActivity(i);
                         Toast.makeText(UpdateProfile.this, "Image uploaded successfully", Toast.LENGTH_SHORT).show();
                         fileReference.getDownloadUrl().addOnSuccessListener(uri -> saveImageUrlToDatabase(uri.toString()));
                     })
@@ -320,7 +331,9 @@ public class UpdateProfile extends AppCompatActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == CAPTURE_IMAGE_REQUEST) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                openCamera(); // Permission granted, open the camera
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    openCamera(); // Permission granted, open the camera
+                }
             } else {
                 Toast.makeText(this, "Camera permission is required to take pictures.", Toast.LENGTH_SHORT).show();
             }
