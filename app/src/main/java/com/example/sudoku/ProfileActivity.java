@@ -114,6 +114,8 @@ public class ProfileActivity extends AppCompatActivity {
         });
 
         statisticsButton.setOnClickListener(v -> {
+            Intent in = new Intent(ProfileActivity.this,Stat_page.class);
+            startActivity(in);
             ToastUtils.showToast(ProfileActivity.this, "Statistics Clicked", 2000);
         });
 

@@ -1,0 +1,381 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:background="@drawable/gradient_color"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Stat_page">
+
+    <ProgressBar
+        android:id="@+id/progressbar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:gravity="center"
+        android:visibility="visible"
+        android:progressTint="#51258AFF"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints">
+    </ProgressBar>
+
+    <View
+        android:id="@+id/overlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#884B4B4B"
+    android:visibility="gone"/>
+
+    <!-- Back Icon and Statistics Title in Horizontal Layout -->
+    <LinearLayout
+        android:layout_marginStart="15dp"
+        android:id="@+id/appbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="60dp">
+
+        <ImageButton
+            android:id="@+id/back_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:background="@android:color/transparent"
+            android:src="@drawable/vect"/>
+
+        <Space
+            android:layout_width="110dp"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:id="@+id/statistics_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginStart="16dp"
+            android:background="@android:color/transparent"
+            android:text="Statistics"
+            android:textColor="@android:color/black"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <!-- CardView for your content -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView"
+        android:layout_width="292dp"
+        android:layout_height="293dp"
+        android:layout_margin="10dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="76dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/card_stroke"
+        android:foreground="@drawable/glass_background"
+        app:cardBackgroundColor="#1AD4D4D4"
+        app:cardCornerRadius="30dp"
+        app:cardElevation="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.494"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/appbar"
+        app:layout_constraintVertical_bias="0.14">
+
+        <LinearLayout
+            android:id="@+id/ln1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:background="@android:color/transparent"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <!-- Donut Progress View -->
+            <app.futured.donut.DonutProgressView
+                android:id="@+id/donut_view2"
+                android:layout_width="95dp"
+                android:layout_gravity="center"
+                android:layout_height="95dp"
+                android:layout_marginStart="29dp"
+                android:background="@android:color/transparent"
+                app:donut_bgLineColor="#51258A"
+                app:donut_gapAngle="0"
+                app:donut_gapWidth="0"
+                app:donut_strokeCap="butt"
+                app:donut_strokeWidth="16dp" />
+
+            <!-- Vertical LinearLayout for Texts (Total Wins and Value) -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="70dp"
+                android:background="@android:color/transparent"
+                android:gravity="center"
+                android:orientation="vertical">
+
+
+                <TextView
+                    android:maxLines="1"
+                    android:ellipsize="end"
+
+                    android:id="@+id/time_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:background="@android:color/transparent"
+                    android:fontFamily="@font/poppins_bold"
+                    android:text=""
+                    android:autoSizeTextType="none"
+
+                    android:textColor="#8697C4"
+                    android:textSize="29sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:fontFamily="@font/poppins_medium"
+                    android:text="Total Wins"
+                    android:textColor="@android:color/black"
+                    android:textSize="14sp" />
+
+                <!-- Total Wins Value -->
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="150dp"
+            android:background="@android:color/transparent"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+
+            <!-- Donut Progress View -->
+            <app.futured.donut.DonutProgressView
+                android:minWidth="95dp"
+                android:minHeight="95dp"
+                android:id="@+id/donut_view"
+                android:layout_width="95dp"
+                android:layout_height="95dp"
+                android:layout_marginStart="29dp"
+                android:gravity="center"
+                android:background="@android:color/transparent"
+                app:donut_bgLineColor="#51258A"
+                app:donut_gapAngle="0"
+                app:donut_gapWidth="0"
+                app:donut_strokeCap="butt"
+                app:donut_strokeWidth="16dp" />
+
+            <!-- Vertical LinearLayout for Texts (Total Wins and Value) -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="70dp"
+                android:background="@android:color/transparent"
+                android:gravity="center"
+                android:orientation="vertical">
+
+
+                <TextView
+                    android:maxLines="1"
+                    android:ellipsize="end"
+
+                    android:id="@+id/wins_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:background="@android:color/transparent"
+                    android:fontFamily="@font/poppins_bold"
+                    android:text=""
+                    android:autoSizeTextType="none"
+                    android:textColor="#8697C4"
+                    android:textSize="29sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:fontFamily="@font/poppins_medium"
+                    android:text="Best Time"
+                    android:textColor="@android:color/black"
+                    android:textSize="14sp" />
+
+                <!-- Total Wins Value -->
+
+
+            </LinearLayout>
+        </LinearLayout>
+
+
+        <!-- Inside the CardView, add your content here -->
+        <!-- You can add TextViews, DonutProgressView, etc. as required -->
+
+    </androidx.cardview.widget.CardView>
+
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView2"
+        android:layout_width="293dp"
+        android:layout_height="70dp"
+        android:layout_margin="10dp"
+        android:background="@drawable/card_stroke"
+        android:foreground="@drawable/glass_background"
+        app:cardBackgroundColor="#1AD4D4D4"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cardView"
+        app:layout_constraintVertical_bias="0.067">
+
+
+        <FrameLayout
+            android:paddingTop="10dp"
+            android:paddingRight="190dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <!-- First Image rotated by 46.2 degrees -->
+            <ImageView
+                android:id="@+id/imageView1"
+                android:layout_width="120dp"
+                android:layout_height="60dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/cycle2"
+                android:rotation="46.2"
+                android:layout_gravity="center" />
+
+            <!-- Second Image rotated by -44.94 degrees, stacked above the first -->
+            <ImageView
+                android:id="@+id/imageView2"
+                android:layout_width="120dp"
+                android:layout_height="60dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/cycle2"
+                android:rotation="-44.94"
+                android:layout_gravity="center" />
+
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/score_board_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:layout_marginStart="130dp"
+            android:layout_marginTop="25dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="20dp"
+            android:background="@android:color/transparent"
+            android:fontFamily="@font/poppins_regular"
+            android:gravity="center"
+            android:text="Your Score Board"
+            android:textAlignment="center"
+            android:textColor="@android:color/black"
+            android:textSize="15sp" />
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="292dp"
+        android:layout_height="186dp"
+        android:layout_margin="10dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/card_stroke"
+        android:foreground="@drawable/glass_background"
+        app:cardBackgroundColor="#1AD4D4D4"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.504"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cardView2"
+        app:layout_constraintVertical_bias="0.14"
+        tools:ignore="MissingConstraints">
+
+        <!-- Container for the text -->
+        <LinearLayout
+            android:background="@android:color/transparent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:padding="16dp">
+
+            <!-- TextView elements inside the card -->
+            <TextView
+                android:id="@+id/totalgames"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins_regular"
+                android:text=""
+                android:textColor="@android:color/black"
+                android:textSize="14sp"
+                android:layout_marginBottom="8dp"
+                android:gravity="center_horizontal"
+                android:textAlignment="center" />
+
+            <TextView
+                android:id="@+id/avgcompletion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:fontFamily="@font/poppins_regular"
+                android:textColor="@android:color/black"
+                android:textSize="14sp"
+                android:layout_marginBottom="8dp"
+                android:gravity="center_horizontal"
+                android:textAlignment="center" />
+
+            <TextView
+                android:id="@+id/avgmistakes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:fontFamily="@font/poppins_regular"
+                android:textColor="@android:color/black"
+                android:textSize="14sp"
+                android:layout_marginBottom="8dp"
+                android:gravity="center_horizontal"
+                android:textAlignment="center" />
+
+            <TextView
+                android:id="@+id/totalhours"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:fontFamily="@font/poppins_regular"
+                android:textColor="@android:color/black"
+                android:textSize="14sp"
+                android:layout_marginBottom="8dp"
+                android:gravity="center_horizontal"
+                android:textAlignment="center" />
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

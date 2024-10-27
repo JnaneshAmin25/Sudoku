@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Background fill color -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="#D4D4D4"/> <!-- Inside color -->
+            <corners android:radius="16dp"/> <!-- Same corner radius as CardView -->
+        </shape>
+    </item>
+    <!-- Stroke on the inside -->
+    <item android:left="8dp" android:right="8dp" android:top="8dp" android:bottom="8dp">
+        <shape android:shape="rectangle">
+            <stroke android:width="2dp" android:color="#000000"/> <!-- Stroke color and width -->
+            <corners android:radius="16dp"/> <!-- Match the corner radius of the CardView -->
+        </shape>
+    </item>
+</layer-list>

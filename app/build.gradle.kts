@@ -33,8 +33,9 @@ android {
 }
 
 dependencies {
-
+    implementation(libs.donut)
     implementation(libs.appcompat)
+    implementation(libs.cardview)
     implementation(libs.material)
     implementation(libs.activity)
     implementation(libs.constraintlayout)
