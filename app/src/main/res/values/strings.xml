@@ -34,4 +34,8 @@
     <string name="mistakes">Mistakes:</string>
     <string name="history">History</string>
     <string name="search">Search</string>
+    <string name="help_3">3. Last Remaining Cell: In a row, column, or block, please find the unique cell where a certain number can be filled.</string>
+    <string name="help_2">2. Last Blank Cell: In each row, column, and block, only numbers 1-9 can be filled. When a row, column, or block has already filled in 8 cells, the remaining blank cell should be filled with the unique missing number.</string>
+    <string name="help_1">1. On an empty cell where you want to place a number. Select the number you want to place in that cell from the options below the grid.</string>
+    <string name="sudoku_master_help">Sudoku Master Help</string>
 </resources>

@@ -34,8 +34,5 @@ public class helppage extends Activity {
         helpImage2.setImageResource(R.drawable.img1);
         ImageView helpImage4 = findViewById(R.id.helpImage3);
         helpImage4.setImageResource(R.drawable.img2);
-
-        ImageView helpImage3 = findViewById(R.id.helpImage4);
-        helpImage3.setImageResource(R.drawable.img3);
     }
 }
