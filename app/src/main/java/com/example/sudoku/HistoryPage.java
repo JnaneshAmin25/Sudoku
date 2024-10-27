@@ -5,35 +5,44 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
-import androidx.cardview.widget.CardView;
-import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
 import java.util.ArrayList;
+import java.util.Collections;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 
 public class HistoryPage extends AppCompatActivity implements SortFragment.SortOptionListener {
 
     private LinearLayout cardContent;
-    private DatabaseReference databaseReference; // Reference to your database
-    private String currentUserId; // To store current user's ID
+    private DatabaseReference databaseReference;
+    private String currentUserId;
+    private ArrayList<MatchData> matchList = new ArrayList<>();
+    private EditText searchBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history_page);
+
         // Initialize views
+        searchBar = findViewById(R.id.searchBar);
+        ImageView searchIcon = findViewById(R.id.search_icon);
+        ImageView refreshButton = findViewById(R.id.refreshButton); // Refresh button
         ImageView backButton = findViewById(R.id.backButton);
         ImageView sortIcon = findViewById(R.id.sortIcon);
         cardContent = findViewById(R.id.cardContent);
@@ -44,14 +53,21 @@ public class HistoryPage extends AppCompatActivity implements SortFragment.SortO
         // Set sort icon listener
         sortIcon.setOnClickListener(v -> openSortOptions());
 
+        // Set click listener on the search icon ImageView
+        searchIcon.setOnClickListener(v -> filterCardsBySearch());
+
+        // Set click listener for refresh button
+        refreshButton.setOnClickListener(v -> sortAndDisplayRecentGames());
+
         // Initialize Firebase Database reference
-        databaseReference = FirebaseDatabase.getInstance().getReference("GameScore"); // Adjust based on your database structure
+        databaseReference = FirebaseDatabase.getInstance().getReference("GameScore");
         currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        // Replace with logic to get the current user's ID
 
         // Load match data
         loadCardViews();
     }
+
+
 
     private void openSortOptions() {
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -64,36 +80,29 @@ public class HistoryPage extends AppCompatActivity implements SortFragment.SortO
         databaseReference.child(currentUserId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                ArrayList<MatchData> matchList = new ArrayList<>();
+                matchList.clear();
 
                 if (dataSnapshot.exists()) {
-                    // Iterate through each game entry
                     for (DataSnapshot gameSnapshot : dataSnapshot.getChildren()) {
                         String timerMode = gameSnapshot.child("timerMode").getValue(String.class);
-                        Long score = gameSnapshot.child("Total Score").getValue(Long.class); // Retrieve as Long
-                        Long mistakesCount = gameSnapshot.child("mistakesCount").getValue(Long.class); // Retrieve as Long
+                        Long score = gameSnapshot.child("Total Score").getValue(Long.class);
+                        Long mistakesCount = gameSnapshot.child("mistakesCount").getValue(Long.class);
                         String completionStatus = gameSnapshot.child("completionStatus").getValue(String.class);
+                        String dateStarted = gameSnapshot.child("dateStarted").getValue(String.class);
 
-                        // Only add games with completionStatus as "completed" or "failure"
+                        // Only add games with completionStatus as "completed" or "failed"
                         if ("completed".equals(completionStatus) || "failed".equals(completionStatus)) {
                             MatchData match = new MatchData(
                                     timerMode,
                                     score,
                                     mistakesCount != null ? mistakesCount.intValue() : 0,
-                                    completionStatus
+                                    completionStatus,
+                                    dateStarted
                             );
                             matchList.add(match);
                         }
                     }
-
-                    // Display the filtered games in CardViews
-                    for (MatchData match : matchList) {
-                        // Convert score and mistakes to Strings here
-                        String scoreString = (match.getScore() != null) ? String.valueOf(match.getScore()) : "0";
-                        String mistakesString = String.valueOf(match.getMistakes());
-
-                        addCardView(match.getTimer(), scoreString, mistakesString, match.getCompletion());
-                    }
+                    displayCards();
                 } else {
                     Log.d("HistoryPage", "No games found for user.");
                 }
@@ -106,15 +115,20 @@ public class HistoryPage extends AppCompatActivity implements SortFragment.SortO
         });
     }
 
+    private void displayCards() {
+        cardContent.removeAllViews();
 
+        for (MatchData match : matchList) {
+            String scoreString = (match.getScore() != null) ? String.valueOf(match.getScore()) : "0";
+            String mistakesString = String.valueOf(match.getMistakes());
 
-
+            addCardView(match.getTimer(), scoreString, mistakesString, match.getCompletion());
+        }
+    }
 
     private void addCardView(String timer, String score, String mistakes, String completion) {
-        // Inflate the card_view.xml layout
         View cardView = LayoutInflater.from(this).inflate(R.layout.card_view, cardContent, false);
 
-        // Set the data into the CardView's TextViews
         TextView timerMode = cardView.findViewById(R.id.timer_value);
         TextView scoreValue = cardView.findViewById(R.id.scoreValue);
         TextView mistakesValue = cardView.findViewById(R.id.mistakesValue);
@@ -134,59 +148,84 @@ public class HistoryPage extends AppCompatActivity implements SortFragment.SortO
             completionText.setTextColor(Color.BLACK);
         }
 
-        // Add the CardView to the LinearLayout
         cardContent.addView(cardView);
     }
 
-    // Handle the selected sort option
+    private void filterCardsBySearch() {
+        String query = searchBar.getText().toString().trim().toLowerCase();
+
+        if (query.isEmpty()) {
+            displayCards(); // Show all cards if search query is empty
+            return;
+        }
+
+        // Filter the matchList based on query
+        ArrayList<MatchData> filteredList = new ArrayList<>();
+        for (MatchData match : matchList) {
+            if ((match.getTimer() != null && match.getTimer().toLowerCase().contains(query)) ||
+                    (match.getScore() != null && String.valueOf(match.getScore()).contains(query)) ||
+                    (match.getCompletion() != null && match.getCompletion().toLowerCase().contains(query))) {
+                filteredList.add(match);
+            }
+        }
+
+        // Update the display with the filtered list
+        displayFilteredCards(filteredList);
+    }
+
+    private void displayFilteredCards(ArrayList<MatchData> filteredList) {
+        cardContent.removeAllViews(); // Clear existing views
+
+        for (MatchData match : filteredList) {
+            String scoreString = (match.getScore() != null) ? String.valueOf(match.getScore()) : "0";
+            String mistakesString = String.valueOf(match.getMistakes());
+
+            addCardView(match.getTimer(), scoreString, mistakesString, match.getCompletion());
+        }
+    }
+
+    private void sortAndDisplayRecentGames() {
+        // Sort matchList by dateStarted in descending order (most recent first)
+        Collections.sort(matchList, (a, b) -> b.getDateStarted().compareTo(a.getDateStarted()));
+        displayCards(); // Display the sorted list
+    }
+
     @Override
     public void onSortOptionSelected(String option) {
-        // Implement sorting logic based on selected option
         switch (option) {
             case "Recent":
-                // Logic for sorting by recent
+                sortAndDisplayRecentGames();
                 break;
             case "Highest Score":
-                // Logic for sorting by highest score
+                Collections.sort(matchList, (a, b) -> Long.compare(b.getScore() != null ? b.getScore() : 0, a.getScore() != null ? a.getScore() : 0));
+                displayCards();
                 break;
             case "Lowest Score":
-                // Logic for sorting by lowest score
+                Collections.sort(matchList, (a, b) -> Long.compare(a.getScore() != null ? a.getScore() : 0, b.getScore() != null ? b.getScore() : 0));
+                displayCards();
                 break;
         }
     }
 
-    // Create a model class for match data
     public static class MatchData {
         private String timer;
         private Long score;
         private int mistakes;
         private String completion;
+        private String dateStarted;
 
-        public MatchData() {
-            // Default constructor required for calls to DataSnapshot.getValue(MatchData.class)
-        }
-
-        public MatchData(String timer, Long score, int mistakes, String completion) {
+        public MatchData(String timer, Long score, int mistakes, String completion, String dateStarted) {
             this.timer = timer;
             this.score = score;
             this.mistakes = mistakes;
             this.completion = completion;
+            this.dateStarted = dateStarted;
         }
 
-        public String getTimer() {
-            return timer;
-        }
-
-        public Long getScore() {
-            return score;
-        }
-
-        public int getMistakes() {
-            return mistakes;
-        }
-
-        public String getCompletion() {
-            return completion;
-        }
+        public String getTimer() { return timer; }
+        public Long getScore() { return score; }
+        public int getMistakes() { return mistakes; }
+        public String getCompletion() { return completion; }
+        public String getDateStarted() { return dateStarted; }
     }
 }
