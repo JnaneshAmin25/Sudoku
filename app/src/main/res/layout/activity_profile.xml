@@ -47,6 +47,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/homeIcon"
             android:layout_marginTop="16dp"
+            android:gravity="center"
             android:background="@drawable/profile_card"
             android:padding="16dp">
 
@@ -67,25 +68,17 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_toEndOf="@id/profilePicture"
-                android:orientation="vertical"
-                android:gravity="center">
+                android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/userName"
-                    android:layout_width="150dp"
-                    android:layout_height="30dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
                     android:text=""
+                    android:layout_marginTop="30dp"
                     android:textColor="@android:color/black"
-                    android:textSize="18sp"
+                    android:textSize="22sp"
                     android:textStyle="bold" />
-
-<!--                <TextView-->
-<!--                    android:id="@+id/userEmail"-->
-<!--                    android:layout_width="100dp"-->
-<!--                    android:layout_height="25dp"-->
-<!--                    android:text=""-->
-<!--                    android:textColor="@android:color/black"-->
-<!--                    android:textSize="14sp" />-->
             </LinearLayout>
 
             <!-- Edit Profile Button -->

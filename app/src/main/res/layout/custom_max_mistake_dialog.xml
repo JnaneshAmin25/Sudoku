@@ -12,6 +12,7 @@
         android:layout_height="wrap_content"
         android:text="Game Over!"
         android:textSize="20sp"
+        android:fontFamily="@font/poppins_medium"
         android:textStyle="bold"
         android:layout_gravity="center"
         android:textColor="@color/black"/>
@@ -19,6 +20,7 @@
     <TextView
         android:id="@+id/gameOverMessage"
         android:layout_width="wrap_content"
+        android:fontFamily="@font/poppins_medium"
         android:layout_height="wrap_content"
         android:text="You've made too many mistakes. Would you like to continue or exit the game?"
         android:textSize="16sp"
@@ -40,6 +42,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Continue"
+            android:fontFamily="@font/poppins_medium"
             android:textColor="@color/black"
             android:layout_marginEnd="10dp"/>
 
@@ -47,6 +50,7 @@
             android:id="@+id/btnExit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins_medium"
             android:text="Exit"
             android:textColor="@color/black"/>
     </LinearLayout>

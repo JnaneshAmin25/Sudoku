@@ -17,6 +17,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="5 sec"
+            android:fontFamily="@font/poppins_medium"
             android:textColor="@color/black"/>
 
         <RadioButton
@@ -24,6 +25,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="5 min"
+            android:fontFamily="@font/poppins_medium"
             android:textColor="@color/black"/>
 
         <RadioButton
@@ -31,6 +33,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="10 min"
+            android:fontFamily="@font/poppins_medium"
             android:textColor="@color/black"/>
 
         <RadioButton
@@ -38,6 +41,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="15 min"
+            android:fontFamily="@font/poppins_medium"
             android:textColor="@color/black"/>
 
         <RadioButton
@@ -45,6 +49,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="No Time"
+            android:fontFamily="@font/poppins_medium"
             android:textColor="@color/black"/>
     </RadioGroup>
 
@@ -53,5 +58,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Apply"
+        android:fontFamily="@font/poppins_medium"
         android:textColor="@color/black"/>
 </LinearLayout>

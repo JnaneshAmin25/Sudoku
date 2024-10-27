@@ -120,7 +120,7 @@ public class UpdateProfile extends AppCompatActivity {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     // Set name
-                    editName.setText(dataSnapshot.child("name").getValue(String.class));
+                    editName.setText(dataSnapshot.child("username").getValue(String.class));
 
                     // Set email and make it non-editable
                     String email = dataSnapshot.child("email").getValue(String.class);
@@ -179,7 +179,7 @@ public class UpdateProfile extends AppCompatActivity {
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         String email = snapshot.child("email").getValue(String.class);
                         if (email != null && email.equals(currentUserEmail)) {
-                            snapshot.getRef().child("name").setValue(editName.getText().toString());
+                            snapshot.getRef().child("username").setValue(editName.getText().toString());
 
                             int day = editDob.getDayOfMonth();
                             int month = editDob.getMonth();
