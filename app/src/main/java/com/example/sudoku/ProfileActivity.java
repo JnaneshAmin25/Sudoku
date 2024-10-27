@@ -1,10 +1,13 @@
 package com.example.sudoku;
 
+
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -25,6 +28,8 @@ public class ProfileActivity extends AppCompatActivity {
     private ImageButton homeIcon, editProfileButton;
     private RelativeLayout historyButton, statisticsButton, logoutButton;
     private TextView userName, userEmail, userDOB, userGender;
+    private ImageView historyArrow;
+
 
     private DatabaseReference databaseReference;
 
@@ -44,13 +49,11 @@ public class ProfileActivity extends AppCompatActivity {
         historyButton = findViewById(R.id.historyButton);
         statisticsButton = findViewById(R.id.statisticsButton);
         logoutButton = findViewById(R.id.logoutButton);
+        historyArrow = findViewById(R.id.historyArrow);
 
         userName = findViewById(R.id.userName);
-        userEmail = findViewById(R.id.userEmail);
-        userDOB = findViewById(R.id.userDOB);
-        userGender = findViewById(R.id.userGender);
+//        userEmail = findViewById(R.id.userEmail);
 
-        // Check if user is logged in
         if (currentUser != null) {
             String userUID = currentUser.getUid(); // Get UID of the logged-in user
             databaseReference = FirebaseDatabase.getInstance().getReference("Users").child(userUID);
@@ -63,18 +66,12 @@ public class ProfileActivity extends AppCompatActivity {
                     if (snapshot.exists()) {
                         String username = snapshot.child("username").getValue(String.class);
                         String email = snapshot.child("email").getValue(String.class);
-                        String dob = snapshot.child("dob").getValue(String.class); // Assuming this is the field name in your database
-                        String gender = snapshot.child("gender").getValue(String.class); // Assuming this is the field name in your database
 
                         Log.d("ProfileActivity", "Username: " + username);
                         Log.d("ProfileActivity", "Email: " + email);
-                        Log.d("ProfileActivity", "DOB: " + dob);
-                        Log.d("ProfileActivity", "Gender: " + gender);
 
                         userName.setText(username);
-                        userEmail.setText(email);
-                        userDOB.setText(dob != null ? dob : "--"); // Handle potential null value
-                        userGender.setText(gender != null ? gender : "--"); // Handle potential null value
+//                        userEmail.setText(email);
                     } else {
                         ToastUtils.showToast(ProfileActivity.this, "User data not found!", 2000);
                     }
@@ -106,6 +103,8 @@ public class ProfileActivity extends AppCompatActivity {
         });
 
         historyButton.setOnClickListener(v -> {
+            Intent i = new Intent(this, HistoryPage.class);
+            startActivity(i);
             ToastUtils.showToast(ProfileActivity.this, "History Clicked", 2000);
         });
 
@@ -117,7 +116,16 @@ public class ProfileActivity extends AppCompatActivity {
             FirebaseAuth.getInstance().signOut();
             ToastUtils.showToast(ProfileActivity.this, "Logged out successfully.", 2000);
             startActivity(new Intent(ProfileActivity.this, MainActivity.class)); // Redirect to login activity
-            finish(); // Close ProfileActivity
+            finish();
+        });
+
+        historyArrow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Start the HistoryPage Activity
+                Intent intent = new Intent(ProfileActivity.this, HistoryPage.class);
+                startActivity(intent);
+            }
         });
     }
 }

@@ -18,20 +18,22 @@
         android:textColor="@android:color/black"
         android:layout_gravity="center_horizontal"
         android:paddingTop="16dp"
-        android:paddingBottom="16dp"/>
+        android:paddingBottom="16dp"
+        android:fontFamily="@font/poppinsbold"/>
 
 
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp">
+        android:layout_marginBottom="16dp"
+        android:fontFamily="@font/poppinsregular">
 
         <!-- Home Icon -->
         <ImageButton
             android:id="@+id/homeIcon"
-            android:layout_width="56dp"
-            android:layout_height="56dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             android:background="?attr/selectableItemBackgroundBorderless"
@@ -53,12 +55,11 @@
                 android:id="@+id/profilePicture"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:src="@drawable/profile_img"
                 android:layout_alignParentStart="true"
+                android:background="@drawable/profile_pic_bg"
                 android:layout_marginEnd="16dp"
                 android:scaleType="centerCrop"
                 android:layout_gravity="center"
-
                 android:contentDescription="Profile Picture" />
 
             <!-- User Info Section -->
@@ -66,47 +67,32 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_toEndOf="@id/profilePicture"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:gravity="center">
 
                 <TextView
                     android:id="@+id/userName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="150dp"
+                    android:layout_height="30dp"
                     android:text=""
                     android:textColor="@android:color/black"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/userEmail"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text=""
-                    android:textColor="@android:color/black"
-                    android:textSize="14sp" />
-
-                <TextView
-                    android:id="@+id/userDOB"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text=""
-                    android:textColor="@android:color/black"
-                    android:textSize="14sp" />
-
-                <TextView
-                    android:id="@+id/userGender"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text=""
-                    android:textColor="@android:color/black"
-                    android:textSize="14sp" />
+<!--                <TextView-->
+<!--                    android:id="@+id/userEmail"-->
+<!--                    android:layout_width="100dp"-->
+<!--                    android:layout_height="25dp"-->
+<!--                    android:text=""-->
+<!--                    android:textColor="@android:color/black"-->
+<!--                    android:textSize="14sp" />-->
             </LinearLayout>
 
             <!-- Edit Profile Button -->
             <ImageButton
                 android:id="@+id/editProfileButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:background="@drawable/color_background"
@@ -121,22 +107,26 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
+        android:fontFamily="@font/poppinsregular"
         android:background="@drawable/button_background1"
+
         android:padding="16dp">
 
         <TextView
             android:id="@+id/historyLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="7dp"
+            android:layout_marginStart="21dp"
             android:text="History"
             android:textColor="@android:color/black"
-            android:textSize="20sp"
-            android:layout_alignParentStart="true"/>
+            android:textSize="20sp" />
 
         <ImageView
             android:id="@+id/historyArrow"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:src="@drawable/ic_arrow_right"
             android:contentDescription="Go to History"
             android:background="@drawable/color_background"
@@ -157,14 +147,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Statistics"
+            android:layout_marginTop="7dp"
+            android:layout_marginStart="21dp"
             android:textColor="@android:color/black"
             android:textSize="20sp"
             android:layout_alignParentStart="true"/>
 
         <ImageView
             android:id="@+id/statisticsArrow"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:src="@drawable/ic_arrow_right"
             android:background="@drawable/color_background"
             android:contentDescription="Go to Statistics"
@@ -176,6 +168,7 @@
         android:id="@+id/logoutButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/poppinsregular"
         android:background="@drawable/button_background1"
         android:padding="16dp">
 
@@ -184,14 +177,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Logout"
+            android:layout_marginTop="7dp"
+            android:layout_marginStart="21dp"
             android:textColor="@android:color/black"
             android:textSize="20sp"
             android:layout_alignParentStart="true"/>
 
         <ImageView
             android:id="@+id/logoutArrow"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:src="@drawable/ic_arrow_right"
             android:contentDescription="Logout"
             android:background="@drawable/color_background"

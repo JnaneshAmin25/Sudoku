@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#80000000"> <!-- Dark semi-transparent background -->
+
+    <LinearLayout
+        android:id="@+id/sortOptions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@color/white"
+        android:padding="12dp"
+        android:elevation="4dp"
+        android:layout_gravity="center">
+
+        <TextView
+            android:id="@+id/sortByRecent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Recent"
+            android:padding="8dp"
+            android:textColor="#000000"/>
+
+        <TextView
+            android:id="@+id/sortByHighestScore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Highest Score"
+            android:padding="8dp"
+            android:textColor="#000000"/>
+
+        <TextView
+            android:id="@+id/sortByLowestScore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Lowest Score"
+            android:padding="8dp"
+            android:textColor="#000000"/>
+    </LinearLayout>
+</FrameLayout>

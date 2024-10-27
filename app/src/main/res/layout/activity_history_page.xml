@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/gradient_background"
+    android:padding="16dp"
+    tools:context=".HistoryPage">
+
+    <LinearLayout
+        android:id="@+id/headerGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/backButton"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/baseline_arrow_back_24"
+            android:contentDescription="Back"/>
+
+        <ImageView
+            android:id="@+id/refreshButton"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/ic_refresh"
+            android:contentDescription="Back"
+            android:layout_marginStart="300dp"
+            />
+
+    </LinearLayout>
+    <TextView
+        android:id="@+id/historyText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/history"
+        android:textSize="24sp"
+        android:textColor="@color/grey"
+        android:fontFamily="@font/poppinsbold"
+        android:textStyle="bold"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp" 
+        android:layout_marginBottom="14dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="16dp">
+
+        <ImageView
+            android:id="@+id/search_icon"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:src="@drawable/ic_search"/>
+
+        <RelativeLayout
+            android:id="@+id/Search_layout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <EditText
+                android:id="@+id/searchBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/search"
+                android:padding="12dp"
+                android:background="@drawable/search_background"
+                android:drawablePadding="8dp"
+                android:textColor="#000000"/>
+        </RelativeLayout>
+        <ImageView
+            android:id="@+id/sortIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/baseline_filter_list_24"
+            android:contentDescription="Sort"
+            android:layout_marginStart="12dp"
+            android:onClick="toggleSortOptions"/>
+    </LinearLayout>
+
+    <ScrollView
+        android:id="@+id/carddisplay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:id="@+id/cardContent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+</ScrollView>
+</LinearLayout>

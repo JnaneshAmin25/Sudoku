@@ -124,38 +124,38 @@
 
             <RelativeLayout
                 android:id="@+id/googleLogoGroup"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:gravity="center"
-                android:background="@drawable/rounded_corner">
+                android:layout_width="300dp"
+                android:layout_height="40dp"
+                android:background="@drawable/rounded_google_corner"
+                android:paddingEnd="10dp">
 
                 <ImageView
                     android:id="@+id/googleLogoImg"
                     android:layout_width="35dp"
                     android:layout_height="35dp"
-                    android:src="@drawable/google_logo" />
+                    android:src="@drawable/google_logo"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginStart="50dp"/>
+
+                <TextView
+                    android:id="@+id/googleSigninText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sign_in_with_google"
+                    android:textColor="@color/grey"
+                    android:fontFamily="@font/poppinsbold"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="100dp"
+                    android:textSize="12sp"/>
+
 
             </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/facebookLogoGroup"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:background="@drawable/rounded_corner"
-                android:layout_marginStart="100dp"
-                android:gravity="center">
-
-                <ImageView
-                    android:id="@+id/facebookLogoImg"
-                    android:layout_width="37dp"
-                    android:layout_height="37dp"
-                    android:src="@drawable/facebook_logo"/>
-
-            </RelativeLayout>
-
 
 
         </LinearLayout>
     </RelativeLayout>
+
+
 
 </RelativeLayout>

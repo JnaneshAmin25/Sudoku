@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
     Button signInButton;
     TextView welcomeText;
     RelativeLayout googleLogoGroup;
-    RelativeLayout facebookLogoGroup;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,21 +80,19 @@ public class MainActivity extends AppCompatActivity {
         signUpButton = findViewById(R.id.signUpButton);
         signInButton = findViewById(R.id.signInButton);
         googleLogoGroup = findViewById(R.id.googleLogoGroup); // Find the Google sign-in button
-        facebookLogoGroup = findViewById(R.id.facebookLogoGroup); // Find the Facebook sign-in button
+       // Find the Facebook sign-in button
         welcomeText = findViewById(R.id.welcome_bac);
 
         // Set default color for the buttons
-        signUpButton.setBackgroundColor(getResources().getColor(R.color.selectedButtonColor));
-        signInButton.setBackgroundColor(getResources().getColor(R.color.deselectedButtonColor));
-        signUpButton.setEnabled(false);
+        signInButton.setBackgroundColor(getResources().getColor(R.color.selectedButtonColor));
+        signUpButton.setBackgroundColor(getResources().getColor(R.color.deselectedButtonColor));
+        signInButton.setEnabled(false);
+        welcomeText.setText(R.string.welcome_bac);
 
-        signUpButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                loadFragment(new SignUpFragment(), true);
-                updateButtonState(true);
-                welcomeText.setText(R.string.create_acc);
-            }
+        signUpButton.setOnClickListener(v -> {
+            loadFragment(new SignUpFragment(), true);
+            updateButtonState(true);
+            welcomeText.setText(R.string.create_acc);
         });
 
         signInButton.setOnClickListener(new View.OnClickListener() {
@@ -107,31 +105,15 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // Google Sign-In button click
-        googleLogoGroup.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                googleLogoGroup.setBackgroundResource(R.drawable.selected_rounded_corner);
-                signInWithGoogle();
-                new android.os.Handler().postDelayed(() -> {
-                    googleLogoGroup.setBackgroundResource(R.drawable.rounded_corner); // Restore original background
-                }, 70);
-            }
+        googleLogoGroup.setOnClickListener(v -> {
+            googleLogoGroup.setBackgroundResource(R.drawable.selected_rounded_corner);
+            signInWithGoogle();
+            new android.os.Handler().postDelayed(() -> {
+                googleLogoGroup.setBackgroundResource(R.drawable.rounded_google_corner); // Restore original background
+            }, 70);
         });
 
-        // Facebook Sign-In button click
-        facebookLogoGroup.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                facebookLogoGroup.setBackgroundResource(R.drawable.selected_rounded_corner);
 
-                // Trigger Facebook login
-                LoginManager.getInstance().logInWithReadPermissions(MainActivity.this, Arrays.asList("email", "public_profile"));
-
-                new android.os.Handler().postDelayed(() -> {
-                    facebookLogoGroup.setBackgroundResource(R.drawable.rounded_corner); // Restore original background
-                }, 70);
-            }
-        });
 
         // Register Facebook callback
         LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
@@ -185,19 +167,16 @@ public class MainActivity extends AppCompatActivity {
     private void firebaseAuthWithGoogle(GoogleSignInAccount account) {
         AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
         auth.signInWithCredential(credential)
-                .addOnCompleteListener(this, new OnCompleteListener<com.google.firebase.auth.AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<com.google.firebase.auth.AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            FirebaseUser user = auth.getCurrentUser();
-                            assert user != null;
-                            saveUserToDatabase(auth.getUid(), user.getEmail());
-                            ToastUtils.showToast(MainActivity.this, "Google sign in successful", 2000); // 1 second duration
-                            updateUI(user);
-                        } else {
-                            ToastUtils.showToast(MainActivity.this, "Authentication failed", 2000); // 1 second duration
-                            updateUI(null);
-                        }
+                .addOnCompleteListener(this, task -> {
+                    if (task.isSuccessful()) {
+                        FirebaseUser user = auth.getCurrentUser();
+                        assert user != null;
+                        saveUserToDatabase(auth.getUid(), user.getEmail());
+                        ToastUtils.showToast(MainActivity.this, "Google sign in successful", 2000); // 1 second duration
+                        updateUI(user);
+                    } else {
+                        ToastUtils.showToast(MainActivity.this, "Authentication failed", 2000); // 1 second duration
+                        updateUI(null);
                     }
                 });
     }
@@ -206,19 +185,16 @@ public class MainActivity extends AppCompatActivity {
     private void handleFacebookAccessToken(AccessToken token) {
         AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
         auth.signInWithCredential(credential)
-                .addOnCompleteListener(this, new OnCompleteListener<com.google.firebase.auth.AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<com.google.firebase.auth.AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            FirebaseUser user = auth.getCurrentUser();
-                            assert user != null;
-                            saveUserToDatabase(auth.getUid(), user.getEmail());
-                            ToastUtils.showToast(MainActivity.this, "Facebook sign in successful", 2000); // 1 second duration
-                            updateUI(user);
-                        } else {
-                            ToastUtils.showToast(MainActivity.this, "Authentication failed", 2000); // 1 second duration
-                            updateUI(null);
-                        }
+                .addOnCompleteListener(this, task -> {
+                    if (task.isSuccessful()) {
+                        FirebaseUser user = auth.getCurrentUser();
+                        assert user != null;
+                        saveUserToDatabase(auth.getUid(), user.getEmail());
+                        ToastUtils.showToast(MainActivity.this, "Facebook sign in successful", 2000); // 1 second duration
+                        updateUI(user);
+                    } else {
+                        ToastUtils.showToast(MainActivity.this, "Authentication failed", 2000); // 1 second duration
+                        updateUI(null);
                     }
                 });
     }

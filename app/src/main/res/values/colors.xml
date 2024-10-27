@@ -2,8 +2,8 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="selectedButtonColor">#8697C4</color>
-    <color name="deselectedButtonColor">#ADBBDA</color>
+    <color name="selectedButtonColor">#ADBBDA</color>
+    <color name="deselectedButtonColor">#8697C4</color>
     <color name="logBtnBlue">#3B5998</color>
     <color name="purple_200">#FFBB86FC</color>
     <color name="purple_500">#FF6200EE</color>
@@ -13,6 +13,8 @@
     <color name="hint_grey">#A8A6A6</color>
     <color name="or_grey">#787878</color>
     <color name="btn_blue">#8697C4</color>
-    <color name="grey">#333333</color><!-- Example color for button tint -->
-
+    <color name="grey">#333333</color>
+    <color name="light_white">#CECECE</color>
+    <color name="help_background_color">#F0F0F0</color>
+    <color name="help_text_color">#000000</color>
 </resources>

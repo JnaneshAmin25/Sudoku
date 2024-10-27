@@ -39,8 +39,8 @@ dependencies {
     implementation(libs.activity)
     implementation(libs.constraintlayout)
     implementation(platform(libs.firebase.bom))
-    implementation(platform("com.google.firebase:firebase-bom:33.4.0"))
-    implementation("com.google.firebase:firebase-auth")
+    implementation(platform(libs.firebase.bom.v3351))
+    implementation(libs.google.firebase.auth)
     implementation(libs.firebase.analytics)
     implementation(libs.play.services.auth)
     implementation(libs.firebase.auth)
@@ -49,5 +49,7 @@ dependencies {
     implementation(libs.firebase.storage)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
+    implementation(libs.github.glide)
+    annotationProcessor(libs.compiler)
     androidTestImplementation(libs.espresso.core)
 }

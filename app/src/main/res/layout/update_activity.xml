@@ -3,21 +3,50 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="10dp"
-    tools:context=".SignUpFragment">
+    tools:context=".SignUpFragment"
+    android:background="@drawable/gradient_background">
 
     <RelativeLayout
         android:id="@+id/SignupGroup"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:gravity="center"
         android:padding="10dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/imgselect"
+            android:orientation="vertical"
+            android:gravity="center_horizontal">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Update Profile"
+                android:textColor="@color/black"
+                android:textAlignment="center"
+                android:textSize="27sp"
+                android:fontFamily="@font/poppinsbold"/>
+
+            <ImageView
+                android:id="@+id/img"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:contentDescription="profilepic"
+                android:background="@drawable/profile_pic_bg"
+                android:padding="2dp"
+                android:scaleType="centerCrop"/>
+
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/userNameGroup"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:gravity="center"
+            android:layout_below="@id/imgselect"
             android:layout_marginTop="20dp">
 
             <TextView
@@ -30,15 +59,16 @@
                 android:textColor="@color/grey" />
 
             <EditText
-                android:id="@+id/unameEditText"
-                android:layout_width="match_parent"
+                android:id="@+id/editname"
+                android:layout_width="300dp"
+                android:textAlignment="center"
                 android:layout_height="45dp"
                 android:background="@drawable/rounded_edittext"
                 android:hint="@string/enter_username"
-                android:textColor="@color/grey"
+                android:textColor="@color/black"
                 android:textColorHint="@color/hint_grey"
                 android:fontFamily="@font/poppinsregular"
-                android:textSize="12sp"
+                android:textSize="15sp"
                 android:paddingStart="15dp"
                 tools:ignore="RtlSymmetry" />
         </LinearLayout>
@@ -47,6 +77,7 @@
             android:id="@+id/emailGroup"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:layout_below="@+id/userNameGroup"
             android:layout_marginTop="15dp"
             android:orientation="vertical">
@@ -61,15 +92,17 @@
                 android:textColor="@color/grey" />
 
             <EditText
-                android:id="@+id/signupEmailEditText"
-                android:layout_width="match_parent"
+                android:id="@+id/editmail"
+                android:enabled="false"
+                android:layout_width="300dp"
                 android:layout_height="45dp"
+                android:textAlignment="center"
                 android:background="@drawable/rounded_edittext"
                 android:hint="@string/email_hint"
-                android:textColor="@color/grey"
+                android:textColor="@color/black"
                 android:textColorHint="@color/hint_grey"
                 android:fontFamily="@font/poppinsregular"
-                android:textSize="12sp"
+                android:textSize="15sp"
                 android:paddingStart="15dp"
                 tools:ignore="RtlSymmetry" />
         </LinearLayout>
@@ -79,6 +112,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/emailGroup"
+            android:gravity="center"
             android:layout_marginTop="15dp"
             android:orientation="vertical">
 
@@ -87,23 +121,23 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/poppinsregular"
-                android:text="@string/password_text"
+                android:text="DOB"
                 android:textSize="12sp"
                 android:textColor="@color/grey" />
 
-            <EditText
-                android:id="@+id/signupPasswordEditText"
-                android:layout_width="match_parent"
-                android:layout_height="45dp"
+            <DatePicker
+                android:id="@+id/editdob"
+                android:layout_width="300dp"
+                android:layout_height="75dp"
+                android:datePickerMode="spinner"
+                android:calendarViewShown="false"
+                android:spinnersShown="true"
+                android:backgroundTint="#453F3F"
+                android:maxDate="12/12/2007"
                 android:background="@drawable/rounded_edittext"
-                android:hint="@string/password_hint"
-                android:textColor="@color/grey"
-                android:textColorHint="@color/hint_grey"
-                android:fontFamily="@font/poppinsregular"
-                android:textSize="12sp"
-                android:paddingStart="15dp"
-                android:inputType="textPassword"
-                tools:ignore="RtlSymmetry" />
+                android:fontFamily="@font/poppinsregular" />
+
+
         </LinearLayout>
 
         <LinearLayout
@@ -112,6 +146,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/passwordGroup"
             android:layout_marginTop="15dp"
+            android:gravity="center"
             android:orientation="vertical">
 
             <TextView
@@ -119,44 +154,79 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/poppinsregular"
-                android:text="@string/confpassword_text"
+                android:text="Gender"
                 android:textSize="12sp"
                 android:textColor="@color/grey" />
 
-            <EditText
-                android:id="@+id/signupConfPasswordEditText"
-                android:layout_width="match_parent"
-                android:layout_height="45dp"
+            <RadioGroup
+                android:id="@+id/radioGroupGender"
+                android:layout_width="300dp"
+                android:layout_height="100dp"
                 android:background="@drawable/rounded_edittext"
-                android:hint="@string/confpassword_hint"
-                android:textColor="@color/grey"
-                android:textColorHint="@color/hint_grey"
-                android:fontFamily="@font/poppinsregular"
-                android:textSize="12sp"
-                android:paddingStart="15dp"
-                android:inputType="textPassword"
-                tools:ignore="RtlSymmetry" />
-        </LinearLayout>
+                android:padding="15dp">
 
+                <RadioButton
+                    android:id="@+id/radioMale"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Male"
+                    android:textColor="@color/black"
+                    android:fontFamily="@font/poppinsregular"
+                    android:textSize="15sp" />
+
+                <RadioButton
+                    android:id="@+id/radioFemale"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Female"
+                    android:textColor="@color/black"
+                    android:fontFamily="@font/poppinsregular"
+                    android:textSize="15sp" />
+            </RadioGroup>
+
+        </LinearLayout>
         <RelativeLayout
-            android:id="@+id/submitGroup"
+            android:id="@+id/save"
             android:layout_width="225dp"
             android:layout_height="40dp"
             android:layout_below="@+id/confpasswordGroup"
             android:layout_centerHorizontal="true"
             android:background="@drawable/rounded_corner"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="20dp"
+            android:backgroundTint="#8BC34A"
             android:gravity="center">
 
             <TextView
-                android:id="@+id/signupButton"
+                android:id="@+id/savebtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/signup_btn_text"
+                android:text="Save"
                 android:textColor="@color/grey"
                 android:fontFamily="@font/poppinsregular"
                 android:textStyle="bold"
-                android:textSize="12sp" />
+                android:textSize="15sp" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/back"
+            android:layout_width="225dp"
+            android:layout_height="40dp"
+            android:layout_below="@+id/save"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/rounded_corner"
+            android:backgroundTint="#03A9F4"
+            android:layout_marginTop="10dp"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/backbtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Back"
+                android:textColor="@color/grey"
+                android:fontFamily="@font/poppinsregular"
+                android:textStyle="bold"
+                android:textSize="15sp" />
         </RelativeLayout>
 
     </RelativeLayout>

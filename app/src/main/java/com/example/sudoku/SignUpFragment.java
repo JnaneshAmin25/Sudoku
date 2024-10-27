@@ -26,10 +26,13 @@ public class SignUpFragment extends Fragment {
     private DatabaseReference databaseReference; // Firebase Database reference
     private EditText signupEmailEditText, signupPasswordEditText, signupConfPasswordEditText, unameEditText;
     private RelativeLayout submitGroup;
+    private String def;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_signup, container, false);
+
+        def="gs://sudoku-cdfa8.appspot.com/images/1729853804947.jpg";
 
         auth = FirebaseAuth.getInstance(); // Initialize FirebaseAuth
         databaseReference = FirebaseDatabase.getInstance().getReference("Users"); // Initialize Firebase Database reference
@@ -103,7 +106,7 @@ public class SignUpFragment extends Fragment {
                             // Save user info to Realtime Database
                             saveUserToDatabase(uid, email, username);
 
-                            ToastUtils.showToast(getContext(), "Signup successful!", 1000); // 1 second duration
+                            ToastUtils.showToast(getContext(), "Signup successful!", 2000); // 1 second duration
 
                             // Clear input fields after successful sign-up
                             unameEditText.setText("");
@@ -116,7 +119,7 @@ public class SignUpFragment extends Fragment {
                         }
                     } else {
                         // If sign-up fails, display a message to the user
-                        ToastUtils.showToast(getContext(), "Signup failed: " + task.getException().getMessage(), 1000); // 1 second duration
+                        ToastUtils.showToast(getContext(), "Signup failed: " + task.getException().getMessage(), 2000); // 1 second duration
                     }
                 });
     }
@@ -129,9 +132,9 @@ public class SignUpFragment extends Fragment {
         databaseReference.child(uid).setValue(user)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        ToastUtils.showToast(getContext(), "User data saved to database.", 1000); // 1 second duration
+                        ToastUtils.showToast(getContext(), "User data saved to database.", 2000); // 1 second duration
                     } else {
-                        ToastUtils.showToast(getContext(), "Failed to save user data.", 1000); // 1 second duration
+                        ToastUtils.showToast(getContext(), "Failed to save user data.", 2000); // 1 second duration
                     }
                 });
     }
