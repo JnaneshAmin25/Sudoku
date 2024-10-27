@@ -1,8 +1,5 @@
 package com.example.sudoku;
 
-
-
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.app.Activity;
@@ -40,9 +37,5 @@ public class helppage extends Activity {
 
         ImageView helpImage3 = findViewById(R.id.helpImage4);
         helpImage3.setImageResource(R.drawable.img3);
-
-
-
-        // Add more image and text initialization as needed
     }
 }
