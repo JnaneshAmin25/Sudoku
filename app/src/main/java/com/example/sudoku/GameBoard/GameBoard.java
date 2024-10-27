@@ -129,9 +129,6 @@ public class GameBoard extends AppCompatActivity implements View.OnClickListener
 
         setupNumberButtons(numberButtons,this);
 
-
-
-        // Set onClickListener to pause/resume the timer
         timerimg.setOnClickListener(v -> {
             if (isTimerRunning) {
                 pauseTimer();
@@ -154,25 +151,17 @@ public class GameBoard extends AppCompatActivity implements View.OnClickListener
             showConfirmDialog();
         });
 
-
-//        String time = getIntent().getStringExtra("time");
-//        startNewGame(time);
-//        startTimer();
-
         startNewGame("--");
 
         timerimg.setEnabled(false);
 
     }
 
-    // Initialize Firebase Database Reference
     private static void initFirebase() {
         String uid = currentUser.getUid();
         gameScoreRef = firebaseDatabase.getReference("GameScore").child(uid);
     }
 
-
-    // Start a new game
     public static void startNewGame(String timerMode) {
         gameId = gameScoreRef.push().getKey();
 
@@ -188,7 +177,6 @@ public class GameBoard extends AppCompatActivity implements View.OnClickListener
         GameBoard.fb_timerMode = timerMode;
 
         Map<String, Object> gameData = new HashMap<>();
-        //gameData.put("gameId", gameId);
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
         gameData.put("undoCount",fb_undoCount);
@@ -201,8 +189,6 @@ public class GameBoard extends AppCompatActivity implements View.OnClickListener
         gameData.put("completionStatus", completionStatus);
         gameScoreRef.child(gameId).setValue(gameData);
     }
-
-
 
     public static void endGame(Context context, boolean isSolved, String failureReason) {
         long timeLeft = calculateTimeLeft(timeLeftInMillis, isTimerRunning);
@@ -227,11 +213,6 @@ public class GameBoard extends AppCompatActivity implements View.OnClickListener
         endGameData.put("timeLeft",timeLeft+" Min");
         endGameData.put("Total Score",score);
 
-//        if (!isSolved) {
-//            fb_reasonForFailure = failureReason; // Assuming you have a class-level variable for this
-//            endGameData.put("reasonForFailure", fb_reasonForFailure);
-//        }
-
         gameScoreRef.child(gameId).updateChildren(endGameData).addOnCompleteListener(task -> {
             if(task.isSuccessful()) {
                 Log.e("success", "Game saved");
@@ -241,6 +222,7 @@ public class GameBoard extends AppCompatActivity implements View.OnClickListener
         });
 
     }
+
     public static long calculateTimeLeft(long timeLeftInMillis, boolean isTimerRunning) {
         if (isTimerRunning) {
             return timeLeftInMillis/60000;
@@ -349,8 +331,6 @@ public class GameBoard extends AppCompatActivity implements View.OnClickListener
             }
         });
     }
-
-
 
     private void showTimeSelectionDialog() {
         Dialog dialog = new Dialog(this);

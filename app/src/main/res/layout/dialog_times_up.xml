@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
+    android:layout_width="200dp"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:gravity="center_horizontal"
+    android:padding="16dp"
+    android:background="@drawable/background_dialog_timer_selection">
 
     <TextView
         android:id="@+id/tvMessage"
@@ -13,12 +15,14 @@
         android:textSize="24sp"
         android:textStyle="bold"
         android:gravity="center"
+        android:fontFamily="@font/poppins_medium"
         android:textColor="@color/black"/>
 
     <Button
         android:id="@+id/btnClose"
-        android:layout_width="match_parent"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/poppins_medium"
         android:text="Close"
         android:textColor="@color/black"/>
 </LinearLayout>

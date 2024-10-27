@@ -12,14 +12,15 @@
         android:id="@+id/progressBarToast"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:indeterminate="true" />
+        android:indeterminate="true"/>
 
     <TextView
         android:id="@+id/progressTextToast"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Signing in..."
+        android:fontFamily="@font/poppins_medium"
         android:layout_marginStart="10dp"
-        android:textColor="@android:color/white"
+        android:textColor="@android:color/black"
         android:textSize="16sp" />
 </LinearLayout>
