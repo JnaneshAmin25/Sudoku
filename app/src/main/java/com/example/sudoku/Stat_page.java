@@ -139,7 +139,6 @@ public class Stat_page extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
-                    // Initialize values for calculations
                     int totalWins = 0;
                     int totalGamesPlayed = 0;
                     long totalTimeLeft = 0;
@@ -147,93 +146,92 @@ public class Stat_page extends AppCompatActivity {
                     long bestCompletionTime = Long.MAX_VALUE;
 
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                        totalGamesPlayed++;  // Increment total games played
+                        totalGamesPlayed++;
 
-                        // Fetch completion status and isSolved values
+                        // Retrieve completion status and isSolved values
                         String completionStatus = snapshot.child("completionStatus").getValue(String.class);
                         Boolean isSolved = snapshot.child("isSolved").getValue(Boolean.class);
 
-                        // Fetch timer mode, timeStarted, and timeLeft
-
-
-                        // Only consider completed and solved games
                         if ("completed".equals(completionStatus) && Boolean.TRUE.equals(isSolved)) {
-                            String timerMode = snapshot.child("timerMode").getValue(String.class);
-                            Long timeLeft = snapshot.child("timeLeft").getValue(Long.class);
-                            long totalGameTimeMillis = convertTimerModeToMillis(timerMode);
-                            String timeStarted = snapshot.child("timeStarted").getValue(String.class);
-                            totalWins++;  // Increment wins count
+                            totalWins++;
 
-                            if ("No time".equals(timerMode)) {
-                                // Calculate best time for "No time" mode based on timeStarted
-                                long timeStartedMillis = convertDateTimeToMillis(timeStarted);
-                                long gameCompletedTime = System.currentTimeMillis();
-                                long elapsedTime = gameCompletedTime - timeStartedMillis;
-                                if (timeLeft != null) {
-                                    bestCompletionTime = Math.min(bestCompletionTime, timeLeft);
+                            // Retrieve timerMode and timeLeft with error handling for timeLeft
+                            String timerMode = snapshot.child("timerMode").getValue(String.class);
+                            Object timeLeftObj = snapshot.child("timeLeft").getValue();
+                            Long timeLeft = null;
+
+                            // Handle different types for timeLeft (Long or String)
+                            if (timeLeftObj instanceof Long) {
+                                timeLeft = (Long) timeLeftObj;
+                            } else if (timeLeftObj instanceof String) {
+                                try {
+                                    timeLeft = Long.parseLong((String) timeLeftObj);
+                                } catch (NumberFormatException e) {
+                                    Log.e("StatPage", "Error parsing timeLeft as Long: " + e.getMessage());
                                 }
-                            } else {
-                                // Calculate best time for timed modes
-                                if (timeLeft != null && totalGameTimeMillis > 0) {
-                                    long elapsedTime = totalGameTimeMillis - timeLeft;
-                                    totalTimeLeft += elapsedTime;
-                                    bestCompletionTime = Math.min(bestCompletionTime, elapsedTime);
-                                    Log.d("StatPage", "Adding to totalTimeLeft: " + elapsedTime);
-                                    long timeUsed = totalGameTimeMillis - timeLeft;
-                                    bestCompletionTime = Math.min(bestCompletionTime, timeUsed);
-                                    Log.d("StatPage", "Best Time (timed): " + bestCompletionTime);
-                                }
+                            }
+
+                            long totalGameTimeMillis = convertTimerModeToMillis(timerMode);
+
+                            if (timeLeft != null && totalGameTimeMillis > 0) {
+                                long elapsedTime = totalGameTimeMillis - timeLeft;
+                                totalTimeLeft += elapsedTime;
+                                bestCompletionTime = Math.min(bestCompletionTime, elapsedTime);
                             }
                         }
 
-                        // Calculate total mistakes
-                        Integer mistakesCount = snapshot.child("mistakesCount").getValue(Integer.class);
-                        if (mistakesCount != null) {
-                            totalMistakes += mistakesCount;
+                        // Retrieve and handle mistakesCount similarly
+                        Object mistakesObj = snapshot.child("mistakesCount").getValue();
+                        Integer mistakesCount = 0;
+
+                        if (mistakesObj instanceof Long) {
+                            mistakesCount = ((Long) mistakesObj).intValue();
+                        } else if (mistakesObj instanceof String) {
+                            try {
+                                mistakesCount = Integer.parseInt((String) mistakesObj);
+                            } catch (NumberFormatException e) {
+                                Log.e("StatPage", "Error parsing mistakesCount as Integer: " + e.getMessage());
+                            }
                         }
+                        totalMistakes += mistakesCount;
                     }
 
-                    // Set bestCompletionTime to 0 if no games were completed
                     if (totalWins == 0) {
                         bestCompletionTime = 0;
                     }
 
-                    // Calculate averages
                     float averageCompletionTime = totalWins > 0 ? (float) totalTimeLeft / totalWins : 0;
 
-                    Log.d("StatPage", "Average Completion Time (ms): " + averageCompletionTime);
-                    avgCompletionTimeText.setText("Average Completion Time: " + (int) (averageCompletionTime / 1000 / 60) + " min");
                     int averageMistakes = totalGamesPlayed > 0 ? Math.round((float) totalMistakes / totalGamesPlayed) : 0;
-                    float totalHoursPlayed = totalTimeLeft / 1000f / 60f / 60f;  // Convert milliseconds to hours
+
+                    float totalHoursPlayed = totalTimeLeft / 1000f / 60f / 60f;
 
                     int finalTotalWins = totalWins;
                     long finalBestCompletionTime = bestCompletionTime;
                     int finalTotalGamesPlayed = totalGamesPlayed;
-                    long finalTotalTimeLeft = totalTimeLeft;
                     runOnUiThread(() -> {
-                        Log.d("StatPage", "Updating UI - Total Wins: " + finalTotalWins);
-                        Log.d("StatPage", "Total time left (ms): " + finalTotalTimeLeft);
-                        Log.d("StatPage", "Total hours played: " + totalHoursPlayed);
-
                         winsText.setText(String.valueOf(finalTotalWins));
-                        updateUI(finalTotalWins, finalBestCompletionTime, finalTotalGamesPlayed, averageCompletionTime, (int) averageMistakes, totalHoursPlayed);
                         avgMistakesText.setText("Average Mistakes: " + averageMistakes);
-
+                        updateUI(finalTotalWins, finalBestCompletionTime, finalTotalGamesPlayed, averageCompletionTime, averageMistakes, totalHoursPlayed);
                     });
                 } else {
                     redirectToNoDataPage();
                     Log.e("StatPage", "Data does not exist!");
                 }
-                showLoading(false);  // Hide progress bar after fetching
+                showLoading(false);
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 Log.e("StatPage", "Database error: " + databaseError.getMessage());
-                progressBar.setVisibility(View.GONE);  // Hide progress bar on error
+                progressBar.setVisibility(View.GONE);
             }
         });
     }
+
+
+
+
 
     /**
      * Convert timer mode to milliseconds.
@@ -269,7 +267,6 @@ public class Stat_page extends AppCompatActivity {
 
 
 
-
     private void updateUI(int totalWins, long bestCompletionTime, int totalGamesPlayed, float avgCompletionTime, int avgMistakes, float totalHoursPlayed) {
         // Reset UI fields before setting new values
         totalGamesText.setText("0");
@@ -283,7 +280,7 @@ public class Stat_page extends AppCompatActivity {
 
         // Display best time in "MM:SS" format
         if (bestCompletionTime < 60000) {  // If less than a minute, show only seconds
-            winsText.setText(String.format(Locale.getDefault(), "%dsec", bestCompletionTime / 1000));
+            winsText.setText(String.format(Locale.getDefault(), "%d sec", bestCompletionTime / 1000));
         } else {  // Otherwise, show both minutes and seconds
             winsText.setText(String.format(Locale.getDefault(), "%02d:%02d min", minutes, seconds));
         }
@@ -291,20 +288,20 @@ public class Stat_page extends AppCompatActivity {
         // Calculate and display avgCompletionTime in "MM:SS" format
         long avgMinutes = (long) (avgCompletionTime / 1000 / 60);
         long avgSeconds = (long) ((avgCompletionTime / 1000) % 60);
-        avgCompletionTimeText.setText(String.format(Locale.getDefault(),
-                "Average Completion Time: %02d:%02d min", avgMinutes, avgSeconds));
+        avgCompletionTimeText.setText(String.format(Locale.getDefault(), "Average Completion Time: %02d:%02d min", avgMinutes, avgSeconds));
 
         // Set other UI elements
         timeText.setText(String.valueOf(totalWins));
         totalGamesText.setText("Total Games Played: " + totalGamesPlayed);
         avgMistakesText.setText("Average Mistakes: " + avgMistakes);
+        Log.d("StatPage", "Mistakes for this game: " + avgMistakes);
+
         totalHoursText.setText(String.format(Locale.getDefault(), "Total Hours Played: %.1f hrs", totalHoursPlayed));
 
-        // Dynamic Donut Cap Normalization
+        // Update donut charts with normalized values
         float maxWinsCap = Math.max(10, totalWins);
         float maxTimeCap = Math.max(bestCompletionTime, 5 * 60 * 1000);
 
-        // Calculate normalized values based on dynamic caps
         float totalWinsNormalized = totalWins / maxWinsCap;
         float bestTimeNormalized = bestCompletionTime / maxTimeCap;
 
@@ -317,6 +314,7 @@ public class Stat_page extends AppCompatActivity {
         donutView.submitData(Arrays.asList(winsSection));
         donutView2.submitData(Arrays.asList(timeSection));
     }
+
 
 
 
