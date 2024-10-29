@@ -208,7 +208,8 @@ public class SudokuGenerator {
     }
 
     private static void removeNumbers(int[][] grid) {
-        int count = 1; // Adjust this to set how many numbers you want to remove
+        int count = 23;
+//        int count = 30 + (int) (Math.random()*40);// Adjust this to set how many numbers you want to remove
         while (count > 0) {
             int row = (int) (Math.random() * GRID_SIZE);
             int col = (int) (Math.random() * GRID_SIZE);
